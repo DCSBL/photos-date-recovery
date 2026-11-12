@@ -52,6 +52,40 @@ final class PhtofxrScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testApplyFlowScreenshots() {
+        let app = launch()
+        let scan = element(app, "scan")
+        XCTAssertTrue(scan.waitForExistence(timeout: 60))
+        scan.tap()
+        let review = element(app, "section.review")
+        XCTAssertTrue(review.waitForExistence(timeout: 30))
+        review.tap()
+
+        let keepAll = element(app, "keepAllCertain")
+        XCTAssertTrue(keepAll.waitForExistence(timeout: 15))
+        keepAll.tap()
+        snapshot(app, "07-bewaard")
+
+        let openReview = element(app, "openReview")
+        XCTAssertTrue(openReview.waitForExistence(timeout: 15))
+        openReview.tap()
+        let apply = element(app, "applyChanges")
+        XCTAssertTrue(apply.waitForExistence(timeout: 15))
+        snapshot(app, "08-controleren")
+
+        apply.tap()
+        XCTAssertTrue(element(app, "applyDone").waitForExistence(timeout: 30))
+        snapshot(app, "09-toegepast")
+
+        element(app, "closeReview").tap()
+        let history = element(app, "history")
+        XCTAssertTrue(history.waitForExistence(timeout: 15))
+        history.tap()
+        XCTAssertTrue(element(app, "revertBatch").waitForExistence(timeout: 15))
+        snapshot(app, "10-geschiedenis")
+    }
+
+    @MainActor
     func testSettingsScreenshots() {
         let app = launch()
         let settings = element(app, "settings")

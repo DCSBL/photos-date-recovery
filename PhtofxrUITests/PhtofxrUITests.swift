@@ -78,3 +78,55 @@ final class PhtofxrUITests: XCTestCase {
         XCTAssertEqual(whatsapp.value as? String, "0")
     }
 }
+
+/// Keep, review, apply and revert against the fake library.
+final class PhtofxrApplyUITests: XCTestCase {
+    override func setUp() {
+        continueAfterFailure = false
+    }
+
+    @MainActor
+    private func element(_ app: XCUIApplication, _ identifier: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
+    }
+
+    @MainActor
+    func testKeepReviewApplyAndRevert() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-phtofxrUITest", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+
+        let scan = element(app, "scan")
+        XCTAssertTrue(scan.waitForExistence(timeout: 60))
+        scan.tap()
+        let review = element(app, "section.review")
+        XCTAssertTrue(review.waitForExistence(timeout: 30))
+        review.tap()
+
+        let keepAll = element(app, "keepAllCertain")
+        XCTAssertTrue(keepAll.waitForExistence(timeout: 15))
+        keepAll.tap()
+        let openReview = element(app, "openReview")
+        XCTAssertTrue(openReview.waitForExistence(timeout: 15))
+        XCTAssertTrue(openReview.isEnabled, "Review button stays disabled after keeping all certain proposals")
+        openReview.tap()
+
+        let apply = element(app, "applyChanges")
+        XCTAssertTrue(apply.waitForExistence(timeout: 15))
+        apply.tap()
+        XCTAssertTrue(element(app, "applyDone").waitForExistence(timeout: 30), "Applying did not finish")
+        element(app, "closeReview").tap()
+
+        let history = element(app, "history")
+        XCTAssertTrue(history.waitForExistence(timeout: 15))
+        history.tap()
+        let revert = element(app, "revertBatch")
+        XCTAssertTrue(revert.waitForExistence(timeout: 15), "History shows no revertable batch")
+        revert.tap()
+
+        let confirm = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Revert' AND identifier != 'revertBatch'")).firstMatch
+        XCTAssertTrue(confirm.waitForExistence(timeout: 15), "No confirmation for the revert")
+        confirm.tap()
+        XCTAssertTrue(element(app, "revertDone").waitForExistence(timeout: 30), "Reverting did not finish")
+    }
+}

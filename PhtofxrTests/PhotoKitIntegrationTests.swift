@@ -42,6 +42,35 @@ struct PhotoKitIntegrationTests {
         #expect(plain?.category == .noDateInName)
     }
 
+    /// A1–A4 in the simulator: a date and caption change through a real change block, the added date untouched,
+    /// and the revert. If iOS shows a permission alert for the change, nothing taps it and the time limit ends the test.
+    @Test("Changes a date and caption through PhotoKit and reverts both", .timeLimit(.minutes(2)))
+    func applyAndRevert() async throws {
+        let library = LivePhotoLibrary()
+        try #require(library.currentAccess() == .full)
+        let snapshots = await library.snapshots(kinds: [.photo]) { _ in }
+        let target = try #require(snapshots.first { $0.filename == "IMG_20170223_123456.jpg" })
+        let original = try #require(target.creationDate)
+        let newDate = try #require(FilenameDateParser().parse("IMG_20170223_123456.jpg")?.resolved(in: .current, keepingTimeOf: nil))
+        let line = "Phtofxr: integration test"
+
+        let changed = try await library.apply([DateEdit(assetID: target.id, newCreationDate: newDate, captionLineToAdd: line)])
+        #expect(changed == [target.id])
+        let afterApply = try #require(PHAsset.fetchAssets(withLocalIdentifiers: [target.id], options: nil).firstObject)
+        print("PHTOFXR applied", String(describing: afterApply.creationDate), String(describing: afterApply.addedDate), afterApply.extendedMetadata.caption ?? "nil")
+        #expect(abs((afterApply.creationDate ?? .distantPast).timeIntervalSince(newDate)) < 1)
+        #expect(afterApply.addedDate == target.addedDate)
+        #expect(afterApply.extendedMetadata.caption?.contains(line) == true)
+
+        let reverted = try await library.apply([DateEdit(assetID: target.id, newCreationDate: original, captionLineToRemove: line)])
+        #expect(reverted == [target.id])
+        let afterRevert = try #require(PHAsset.fetchAssets(withLocalIdentifiers: [target.id], options: nil).firstObject)
+        print("PHTOFXR reverted", String(describing: afterRevert.creationDate), afterRevert.extendedMetadata.caption ?? "nil")
+        #expect(abs((afterRevert.creationDate ?? .distantPast).timeIntervalSince(original)) < 1)
+        #expect(afterRevert.extendedMetadata.caption?.contains(line) != true)
+        #expect(afterRevert.addedDate == target.addedDate)
+    }
+
     @Test("Diagnostics read the whole library")
     func diagnostics() async {
         let report = await LivePhotoLibrary().diagnostics(sampleSize: 10)
