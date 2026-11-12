@@ -92,3 +92,19 @@ public enum ResultSection: String, CaseIterable, Identifiable, Hashable, Sendabl
         return groups
     }
 }
+
+extension Classification {
+    /// The same proposal, set aside by the user ("don't keep"). The proposed date stays, so it can be restored.
+    public func skippedByUser() -> Classification {
+        Classification(asset: asset, category: .skipped, filenameDate: filenameDate, proposedDate: proposedDate, reasons: [.skippedByUser])
+    }
+
+    /// Applies the user's "don't keep" choices to a scan that was classified without them. Only proposals can be
+    /// skipped; everything else keeps its category.
+    public static func applying(skipped: Set<String>, to classified: [Classification]) -> [Classification] {
+        guard !skipped.isEmpty else { return classified }
+        return classified.map { item in
+            item.category.isReviewable && skipped.contains(item.id) ? item.skippedByUser() : item
+        }
+    }
+}
