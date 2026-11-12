@@ -290,7 +290,7 @@ struct NeighborDateTests {
         )
     }
 
-    let items: [Classification] = [
+    var items: [Classification] { [
         // Out of order on purpose: the order that counts is the order of adding.
         item("d-no-name", .noDateInName, added: moment(2016, 10, 11, 14, 0, 30)),
         item("a-proposal", .certain, added: moment(2016, 10, 11, 14, 0, 0), proposed: moment(2013, 1, 1)),
@@ -299,7 +299,7 @@ struct NeighborDateTests {
         item("e-other-day", .certain, added: moment(2016, 10, 12, 9), proposed: moment(2014, 1, 1)),
         item("f-no-name-next-day", .noDateInName, added: moment(2016, 10, 12, 10)),
         item("g-first", .noDateInName, added: moment(2016, 10, 13, 10)),
-    ]
+    ] }
 
     @Test("Skips photos without a trusted date and stays within the import day")
     func previous() {
