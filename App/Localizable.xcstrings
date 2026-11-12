@@ -21,6 +21,66 @@
         }
       }
     },
+    "%lld certain · %lld uncertain · %lld kept" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld zeker · %lld onzeker · %lld bewaard"
+          }
+        }
+      }
+    },
+    "%lld dates changed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datums aangepast: %lld"
+          }
+        }
+      }
+    },
+    "%lld dates reverted" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teruggedraaid: %lld"
+          }
+        }
+      }
+    },
+    "%lld not changed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet aangepast: %lld"
+          }
+        }
+      }
+    },
+    "%lld of them with a date you picked." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarvan %lld met een zelfgekozen datum."
+          }
+        }
+      }
+    },
+    "%lld photos get a new date." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aantal foto's met een nieuwe datum: %lld"
+          }
+        }
+      }
+    },
     "A proposal is only certain when the date in Photos looks filled in: the moment of import, a day full of photos whose names point elsewhere, or a camera's reset date." : {
       "localizations" : {
         "nl" : {
@@ -47,6 +107,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alleen toegang tot gekozen foto's"
+          }
+        }
+      }
+    },
+    "Actions for this group" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acties voor deze groep"
           }
         }
       }
@@ -141,6 +211,26 @@
         }
       }
     },
+    "Batches you apply appear here and can be reverted." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat je toepast verschijnt hier en kun je terugdraaien."
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
+          }
+        }
+      }
+    },
     "Caption: %@" : {
       "localizations" : {
         "nl" : {
@@ -171,6 +261,36 @@
         }
       }
     },
+    "Change %lld dates" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas datums aan (%lld)"
+          }
+        }
+      }
+    },
+    "Change date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum aanpassen"
+          }
+        }
+      }
+    },
+    "Change picked date…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekozen datum wijzigen…"
+          }
+        }
+      }
+    },
     "Change selection" : {
       "localizations" : {
         "nl" : {
@@ -181,12 +301,62 @@
         }
       }
     },
+    "Changed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepast"
+          }
+        }
+      }
+    },
     "Changed by Phtofxr" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Door Phtofxr aangepast"
+          }
+        }
+      }
+    },
+    "Changing dates…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datums aanpassen…"
+          }
+        }
+      }
+    },
+    "Checking…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren…"
+          }
+        }
+      }
+    },
+    "Checks every photo for a filename and an added date, and compares the photo's name with its file's name on %lld photos spread over the library. Takes about as long as a scan. Changes nothing." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleert bij elke foto of er een bestandsnaam en een toegevoegd-datum is, en vergelijkt bij %lld foto's verspreid over de bibliotheek de naam van de foto met die van het bestand. Duurt ongeveer even lang als een scan. Verandert niets."
+          }
+        }
+      }
+    },
+    "Clear choices" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wis keuzes"
           }
         }
       }
@@ -211,12 +381,42 @@
         }
       }
     },
+    "Date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum"
+          }
+        }
+      }
+    },
     "Date in the name" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datum in de naam"
+          }
+        }
+      }
+    },
+    "Date picked by you" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum zelf gekozen"
+          }
+        }
+      }
+    },
+    "Date picked: applied after you review and confirm" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum gekozen: wordt toegepast nadat je hebt gecontroleerd en bevestigd"
           }
         }
       }
@@ -261,6 +461,26 @@
         }
       }
     },
+    "Don't keep" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet bewaren"
+          }
+        }
+      }
+    },
+    "Don't keep all %lld" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle niet bewaren (%lld)"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "nl" : {
@@ -277,6 +497,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dropbox-camera-upload"
+          }
+        }
+      }
+    },
+    "Examples" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbeelden"
           }
         }
       }
@@ -301,6 +531,36 @@
         }
       }
     },
+    "For example: %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijvoorbeeld: %@"
+          }
+        }
+      }
+    },
+    "From the name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uit de naam"
+          }
+        }
+      }
+    },
+    "History" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschiedenis"
+          }
+        }
+      }
+    },
     "In Photos now" : {
       "localizations" : {
         "nl" : {
@@ -321,6 +581,96 @@
         }
       }
     },
+    "Keep" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar"
+          }
+        }
+      }
+    },
+    "Keep %lld certain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar %lld zekere"
+          }
+        }
+      }
+    },
+    "Keep all %lld" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar alle (%lld)"
+          }
+        }
+      }
+    },
+    "Keep all certain proposals" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar alle zekere voorstellen"
+          }
+        }
+      }
+    },
+    "Keep certain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar zekere"
+          }
+        }
+      }
+    },
+    "Keep this proposal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar dit voorstel"
+          }
+        }
+      }
+    },
+    "Kept" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaard"
+          }
+        }
+      }
+    },
+    "Kept with a date you picked" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaard met een zelfgekozen datum"
+          }
+        }
+      }
+    },
+    "Kept: applied after you review and confirm" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaard: wordt toegepast nadat je hebt gecontroleerd en bevestigd"
+          }
+        }
+      }
+    },
     "Last scan" : {
       "localizations" : {
         "nl" : {
@@ -337,6 +687,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bibliotheek"
+          }
+        }
+      }
+    },
+    "Like the previous photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoals de vorige foto"
+          }
+        }
+      }
+    },
+    "Loading %lld photos…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld foto's laden…"
           }
         }
       }
@@ -381,6 +751,36 @@
         }
       }
     },
+    "New date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwe datum"
+          }
+        }
+      }
+    },
+    "New dates %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwe datums %@"
+          }
+        }
+      }
+    },
+    "New dates from %@ to %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwe datums van %@ tot %@"
+          }
+        }
+      }
+    },
     "No access to your photos" : {
       "localizations" : {
         "nl" : {
@@ -411,12 +811,42 @@
         }
       }
     },
-    "No photo selected" : {
+    "No import selected" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geen foto gekozen"
+            "value" : "Geen import gekozen"
+          }
+        }
+      }
+    },
+    "Not changed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet aangepast"
+          }
+        }
+      }
+    },
+    "Not checked yet" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet gecontroleerd"
+          }
+        }
+      }
+    },
+    "Nothing changed yet" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niets aangepast"
           }
         }
       }
@@ -431,12 +861,32 @@
         }
       }
     },
+    "Nothing was changed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is niets aangepast"
+          }
+        }
+      }
+    },
     "OneDrive camera upload" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OneDrive-camera-upload"
+          }
+        }
+      }
+    },
+    "Only the date taken changes. The date added stays as it is, so the original import date is never lost." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen de opnamedatum verandert. De datum van toevoegen blijft zoals hij is, dus de originele importdatum gaat nooit verloren."
           }
         }
       }
@@ -461,12 +911,42 @@
         }
       }
     },
+    "Open a photo to pick its date yourself." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open een foto om zelf de datum te kiezen."
+          }
+        }
+      }
+    },
     "Other" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Overig"
+          }
+        }
+      }
+    },
+    "Other date…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere datum…"
+          }
+        }
+      }
+    },
+    "Per import" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per import"
           }
         }
       }
@@ -481,12 +961,32 @@
         }
       }
     },
+    "Photo not found" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto niet gevonden"
+          }
+        }
+      }
+    },
     "Photos" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Foto's"
+          }
+        }
+      }
+    },
+    "Photos compared" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergeleken foto's"
           }
         }
       }
@@ -500,6 +1000,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phtofxr heeft deze datum al aangepast."
+          }
+        }
+      }
+    },
+    "Phtofxr already changed this date. Revert it under History to change it again." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr heeft deze datum al aangepast. Draai hem terug onder Geschiedenis om hem opnieuw aan te passen."
           }
         }
       }
@@ -544,12 +1054,72 @@
         }
       }
     },
+    "Phtofxr: original date %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr: oorspronkelijke datum %@"
+          }
+        }
+      }
+    },
+    "Picked by you" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zelf gekozen"
+          }
+        }
+      }
+    },
+    "Propose again" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weer voorstellen"
+          }
+        }
+      }
+    },
+    "Propose all again" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle weer voorstellen"
+          }
+        }
+      }
+    },
     "Proposed" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voorstel"
+          }
+        }
+      }
+    },
+    "Put the original date in the caption" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet de oorspronkelijke datum in het bijschrift"
+          }
+        }
+      }
+    },
+    "Quick picks" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snel kiezen"
           }
         }
       }
@@ -584,12 +1154,82 @@
         }
       }
     },
+    "Remove picked date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekozen datum wissen"
+          }
+        }
+      }
+    },
     "Result" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resultaat"
+          }
+        }
+      }
+    },
+    "Revert %lld dates" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draai terug (%lld)"
+          }
+        }
+      }
+    },
+    "Revert these dates?" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze datums terugdraaien?"
+          }
+        }
+      }
+    },
+    "Reverted" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teruggedraaid"
+          }
+        }
+      }
+    },
+    "Reverting…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terugdraaien…"
+          }
+        }
+      }
+    },
+    "Review" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren"
+          }
+        }
+      }
+    },
+    "Review %lld changes" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren (%lld)"
           }
         }
       }
@@ -704,6 +1344,16 @@
         }
       }
     },
+    "Select" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteren"
+          }
+        }
+      }
+    },
     "Settings" : {
       "localizations" : {
         "nl" : {
@@ -724,6 +1374,16 @@
         }
       }
     },
+    "Show history" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon geschiedenis"
+          }
+        }
+      }
+    },
     "Skipped" : {
       "localizations" : {
         "nl" : {
@@ -740,6 +1400,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verdacht"
+          }
+        }
+      }
+    },
+    "Swipe an import to keep all its certain proposals, or tap it to see the photos." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veeg een import naar rechts om alle zekere voorstellen te bewaren, of tik erop om de foto's te zien."
           }
         }
       }
@@ -864,6 +1534,26 @@
         }
       }
     },
+    "The photos get their previous date back and Phtofxr's caption line is removed. iOS asks for permission first." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De foto's krijgen hun vorige datum terug en de bijschriftregel van Phtofxr wordt verwijderd. iOS vraagt eerst om toestemming."
+          }
+        }
+      }
+    },
+    "The picked date counts as kept and goes to the review. Nothing changes until you confirm there." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gekozen datum telt als bewaard en gaat mee naar Controleren. Er verandert niets tot je daar bevestigt."
+          }
+        }
+      }
+    },
     "This filename format is not always reliable." : {
       "localizations" : {
         "nl" : {
@@ -890,6 +1580,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Onzeker"
+          }
+        }
+      }
+    },
+    "Undo keep" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toch niet bewaren"
           }
         }
       }
@@ -964,12 +1664,32 @@
         }
       }
     },
+    "You can revert this batch under History." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt deze batch terugdraaien via Geschiedenis."
+          }
+        }
+      }
+    },
     "You chose not to keep this proposal." : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je hebt gekozen dit voorstel niet te bewaren."
+          }
+        }
+      }
+    },
+    "Your choice" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jouw keuze"
           }
         }
       }
@@ -984,12 +1704,152 @@
         }
       }
     },
+    "before minimum year" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vóór het minimumjaar"
+          }
+        }
+      }
+    },
+    "camera clock reset" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cameraklok gereset"
+          }
+        }
+      }
+    },
+    "changed by Phtofxr" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aangepast door Phtofxr"
+          }
+        }
+      }
+    },
+    "date does not exist" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "datum bestaat niet"
+          }
+        }
+      }
+    },
+    "date is the import moment" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "datum is het importmoment"
+          }
+        }
+      }
+    },
+    "day" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dag"
+          }
+        }
+      }
+    },
+    "days apart" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dagen verschil"
+          }
+        }
+      }
+    },
+    "format not always reliable" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "formaat niet altijd betrouwbaar"
+          }
+        }
+      }
+    },
+    "hours" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "uur"
+          }
+        }
+      }
+    },
+    "iOS asks for your permission next. Everything can be reverted under History." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS vraagt daarna nog om je toestemming. Alles is terug te draaien via Geschiedenis."
+          }
+        }
+      }
+    },
+    "in the future" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in de toekomst"
+          }
+        }
+      }
+    },
     "less than a day apart" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "minder dan een dag verschil"
+          }
+        }
+      }
+    },
+    "matches the name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "klopt met de naam"
+          }
+        }
+      }
+    },
+    "minutes" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "minuten"
+          }
+        }
+      }
+    },
+    "month" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "maand"
           }
         }
       }
@@ -1010,6 +1870,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "geen datum"
+          }
+        }
+      }
+    },
+    "no date in Photos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geen datum in Foto's"
+          }
+        }
+      }
+    },
+    "no date in name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geen datum in naam"
+          }
+        }
+      }
+    },
+    "not kept" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "niet bewaard"
+          }
+        }
+      }
+    },
+    "own date differs" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eigen datum wijkt af"
+          }
+        }
+      }
+    },
+    "pile day of %lld photos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "stapeldag van %lld foto's"
+          }
+        }
+      }
+    },
+    "seconds" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "seconden"
+          }
+        }
+      }
+    },
+    "year" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "jaar"
           }
         }
       }

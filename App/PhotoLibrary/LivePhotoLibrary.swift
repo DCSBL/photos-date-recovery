@@ -30,10 +30,35 @@ final class LivePhotoLibrary: PhotoLibraryClient {
         return await requestImage(asset, size: size, mode: .fastFormat)
     }
 
-    func diagnostics(sampleSize: Int) async -> DiagnosticsReport {
+    func diagnostics(sampleSize: Int, progress: @escaping @Sendable (Double) -> Void) async -> DiagnosticsReport {
         await Task.detached(priority: .userInitiated) {
-            Self.readDiagnostics(sampleSize: sampleSize)
+            Self.readDiagnostics(sampleSize: sampleSize, progress: progress)
         }.value
+    }
+
+    func apply(_ edits: [DateEdit]) async throws -> Set<String> {
+        guard !edits.isEmpty else { return [] }
+        // Reading the current captions can touch every asset; keep it off the main actor.
+        let prepared = await Task.detached(priority: .userInitiated) {
+            Self.prepare(edits)
+        }.value
+        let assets = prepared.assets
+        let captions = prepared.captions
+        let found = edits.filter { assets[$0.assetID] != nil }
+        guard !found.isEmpty else { return [] }
+        try await PHPhotoLibrary.shared().performChanges {
+            for edit in found {
+                guard let asset = assets[edit.assetID] else { continue }
+                let request = PHAssetChangeRequest(for: asset)
+                request.creationDate = edit.newCreationDate
+                if let caption = captions[edit.assetID] {
+                    // Setting nil leaves the caption unchanged in practice (seen in the simulator, iOS 27.2),
+                    // so an empty string clears it.
+                    request.caption = caption ?? ""
+                }
+            }
+        }
+        return Set(found.map(\.assetID))
     }
 
     func presentLimitedLibraryPicker() {
@@ -59,6 +84,28 @@ final class LivePhotoLibrary: PhotoLibraryClient {
                 continuation.resume(returning: image)
             }
         }
+    }
+
+    /// The assets to change, and for each caption edit the full new caption (`.some(nil)` clears it).
+    nonisolated static func prepare(_ edits: [DateEdit]) -> (assets: [String: PHAsset], captions: [String: String?]) {
+        let options = PHFetchOptions()
+        options.includeHiddenAssets = true
+        options.prefetchAssetExtendedMetadata = true
+        let result = PHAsset.fetchAssets(withLocalIdentifiers: edits.map(\.assetID), options: options)
+        var assets: [String: PHAsset] = [:]
+        for index in 0..<result.count {
+            let asset = result.object(at: index)
+            assets[asset.localIdentifier] = asset
+        }
+        var captions: [String: String?] = [:]
+        for edit in edits where edit.captionLineToAdd != nil || edit.captionLineToRemove != nil {
+            guard let asset = assets[edit.assetID] else { continue }
+            var caption = asset.extendedMetadata.caption
+            if let line = edit.captionLineToRemove { caption = CaptionEditor.removing(line, from: caption) }
+            if let line = edit.captionLineToAdd { caption = CaptionEditor.adding(line, to: caption) }
+            captions[edit.assetID] = .some(caption)
+        }
+        return (assets, captions)
     }
 
     nonisolated static func access(_ status: PHAuthorizationStatus) -> LibraryAccess {
@@ -136,7 +183,7 @@ final class LivePhotoLibrary: PhotoLibraryClient {
         }
     }
 
-    nonisolated static func readDiagnostics(sampleSize: Int) -> DiagnosticsReport {
+    nonisolated static func readDiagnostics(sampleSize: Int, progress: (Double) -> Void) -> DiagnosticsReport {
         let clock = ContinuousClock()
         let start = clock.now
         let options = PHFetchOptions()
@@ -146,18 +193,20 @@ final class LivePhotoLibrary: PhotoLibraryClient {
 
         var report = DiagnosticsReport()
         report.total = result.count
-        // An even spread over the library, so an old import shows up next to recent photos.
+        // Reading resources costs about a millisecond per photo, so only an even spread of the library is
+        // compared; an old import shows up in it next to recent photos.
         let step = max(1, result.count / max(sampleSize, 1))
         for index in 0..<result.count {
             let asset = result.object(at: index)
             let assetName = asset.extendedMetadata.originalFilename
-            let resources = PHAssetResource.assetResources(for: asset)
-            let resourceName = primaryResource(of: resources)?.filename
             if assetName == nil { report.missingAssetFilename += 1 }
-            if resourceName == nil { report.missingResourceFilename += 1 }
-            if let assetName, let resourceName, assetName != resourceName { report.differentFilenames += 1 }
             if asset.addedDate == nil { report.missingAddedDate += 1 }
             if index % step == 0, report.samples.count < sampleSize {
+                let resources = PHAssetResource.assetResources(for: asset)
+                let resourceName = primaryResource(of: resources)?.filename
+                report.sampleSize += 1
+                if resourceName == nil { report.missingResourceFilename += 1 }
+                if let assetName, let resourceName, assetName != resourceName { report.differentFilenames += 1 }
                 report.samples.append(AssetDiagnostics(
                     id: asset.localIdentifier,
                     assetFilename: assetName,
@@ -168,7 +217,9 @@ final class LivePhotoLibrary: PhotoLibraryClient {
                     caption: asset.extendedMetadata.caption
                 ))
             }
+            if index % 500 == 0 { progress(Double(index) / Double(max(result.count, 1))) }
         }
+        progress(1)
         report.duration = start.duration(to: clock.now)
         return report
     }

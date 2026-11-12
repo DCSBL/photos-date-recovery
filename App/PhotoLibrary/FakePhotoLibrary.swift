@@ -7,7 +7,8 @@ import UIKit
 /// import on 11 and 12 October 2016, plus one example of every other category.
 final class FakePhotoLibrary: PhotoLibraryClient {
     private var access: LibraryAccess
-    let assets: [AssetSnapshot]
+    private(set) var assets: [AssetSnapshot]
+    private(set) var captions: [String: String] = [:]
 
     init(access: LibraryAccess = .notDetermined, assets: [AssetSnapshot] = FakePhotoLibrary.fixture()) {
         self.access = access
@@ -28,10 +29,12 @@ final class FakePhotoLibrary: PhotoLibraryClient {
 
     func thumbnail(for id: String, pixelSide: CGFloat) async -> UIImage? { nil }
 
-    func diagnostics(sampleSize: Int) async -> DiagnosticsReport {
+    func diagnostics(sampleSize: Int, progress: @escaping @Sendable (Double) -> Void) async -> DiagnosticsReport {
+        progress(1)
         var report = DiagnosticsReport()
         report.total = assets.count
         report.missingAssetFilename = assets.filter { $0.filename == nil }.count
+        report.sampleSize = min(sampleSize, assets.count)
         report.missingResourceFilename = report.missingAssetFilename
         report.missingAddedDate = assets.filter { $0.addedDate == nil }.count
         report.samples = assets.prefix(sampleSize).map { asset in
@@ -46,6 +49,21 @@ final class FakePhotoLibrary: PhotoLibraryClient {
             )
         }
         return report
+    }
+
+    func apply(_ edits: [DateEdit]) async throws -> Set<String> {
+        var changed: Set<String> = []
+        for edit in edits {
+            guard let index = assets.firstIndex(where: { $0.id == edit.assetID }) else { continue }
+            let old = assets[index]
+            assets[index] = AssetSnapshot(id: old.id, filename: old.filename, creationDate: edit.newCreationDate, addedDate: old.addedDate, kind: old.kind)
+            var caption: String? = captions[edit.assetID]
+            if let line = edit.captionLineToRemove { caption = CaptionEditor.removing(line, from: caption) }
+            if let line = edit.captionLineToAdd { caption = CaptionEditor.adding(line, to: caption) }
+            captions[edit.assetID] = caption
+            changed.insert(edit.assetID)
+        }
+        return changed
     }
 
     func presentLimitedLibraryPicker() {}

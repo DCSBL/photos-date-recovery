@@ -11,7 +11,11 @@ protocol PhotoLibraryClient: AnyObject {
     func snapshots(kinds: Set<MediaKind>, progress: @escaping @Sendable (Double) -> Void) async -> [AssetSnapshot]
     /// A thumbnail from what is stored on this device; `nil` when only iCloud has it.
     func thumbnail(for id: String, pixelSide: CGFloat) async -> UIImage?
-    func diagnostics(sampleSize: Int) async -> DiagnosticsReport
+    /// Counts names and added dates over the whole library and compares resource names on `sampleSize` photos.
+    func diagnostics(sampleSize: Int, progress: @escaping @Sendable (Double) -> Void) async -> DiagnosticsReport
+    /// Sets new creation dates (and caption lines) in one change block, so iOS asks for permission once.
+    /// Returns the photos that were changed; photos that no longer exist are left out. All or nothing per call.
+    func apply(_ edits: [DateEdit]) async throws -> Set<String>
     /// Lets the user change which photos a limited-access app may see.
     func presentLimitedLibraryPicker()
 }

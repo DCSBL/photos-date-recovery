@@ -28,6 +28,58 @@ public struct TimeOfDay: Hashable, Sendable {
     }
 }
 
+/// Where one part of the date sits in the filename, so the app can mark it (year, month, day, …).
+public struct DateSpan: Hashable, Sendable {
+    public enum Part: String, CaseIterable, Hashable, Sendable {
+        case year, month, day, hour, minute, second
+        /// Milliseconds, shown like seconds.
+        case fraction
+    }
+
+    public let part: Part
+    /// UTF-16 offsets into the filename, as `NSRange` and `AttributedString` count them.
+    public let utf16Range: Range<Int>
+
+    public init(part: Part, utf16Range: Range<Int>) {
+        self.part = part
+        self.utf16Range = utf16Range
+    }
+
+    /// A piece of a filename: plain text, or one part of the date.
+    public struct Segment: Hashable, Sendable {
+        public let text: String
+        public let part: Part?
+
+        public init(_ text: String, part: Part? = nil) {
+            self.text = text
+            self.part = part
+        }
+    }
+
+    /// Cuts `filename` into plain text and date parts, in order, so the app can mark each part. Spans that
+    /// overlap an earlier one or fall outside the name are left out.
+    public static func segments(of filename: String, spans: [DateSpan]) -> [Segment] {
+        let utf16 = filename.utf16
+        func index(_ offset: Int) -> String.Index { utf16.index(utf16.startIndex, offsetBy: offset) }
+        func text(_ range: Range<Int>) -> String { String(filename[index(range.lowerBound)..<index(range.upperBound)]) }
+
+        var segments: [Segment] = []
+        var cursor = 0
+        for span in spans.sorted(by: { $0.utf16Range.lowerBound < $1.utf16Range.lowerBound })
+        where span.utf16Range.lowerBound >= cursor && span.utf16Range.upperBound <= utf16.count && !span.utf16Range.isEmpty {
+            if span.utf16Range.lowerBound > cursor {
+                segments.append(Segment(text(cursor..<span.utf16Range.lowerBound)))
+            }
+            segments.append(Segment(text(span.utf16Range), part: span.part))
+            cursor = span.utf16Range.upperBound
+        }
+        if cursor < utf16.count {
+            segments.append(Segment(text(cursor..<utf16.count)))
+        }
+        return segments
+    }
+}
+
 /// The date (and maybe time) a filename claims, before it is placed in a time zone.
 public struct FilenameDate: Hashable, Sendable {
     /// `FilenameFormat.id` of the format that recognized the name.
@@ -38,14 +90,25 @@ public struct FilenameDate: Hashable, Sendable {
     /// `nil` when the name only carries a date (WhatsApp, BlackBerry, …).
     public var time: TimeOfDay?
     public var clock: FilenameClock
+    /// The parts of the filename the date was read from, in order. Empty for epoch timestamps.
+    public var spans: [DateSpan]
 
-    public init(formatID: String, year: Int, month: Int, day: Int, time: TimeOfDay?, clock: FilenameClock) {
+    public init(
+        formatID: String,
+        year: Int,
+        month: Int,
+        day: Int,
+        time: TimeOfDay?,
+        clock: FilenameClock,
+        spans: [DateSpan] = []
+    ) {
         self.formatID = formatID
         self.year = year
         self.month = month
         self.day = day
         self.time = time
         self.clock = clock
+        self.spans = spans
     }
 
     public var hasTime: Bool { time != nil }
