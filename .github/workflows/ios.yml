@@ -130,7 +130,10 @@ jobs:
           xcrun simctl bootstatus "$udid" -b
           echo "SIM_UDID=$udid" >> "$GITHUB_ENV"
 
-      - name: App tests
+      # One xcodebuild session for app and UI tests: each session costs about a minute to start, and the
+      # first launch of the app on a fresh simulator (up to three minutes) is paid once.
+      # -collect-test-diagnostics never: after a retried failure, collecting diagnostics took over five minutes.
+      - name: App and UI tests
         shell: bash
         run: |
           set -euo pipefail
@@ -138,24 +141,15 @@ jobs:
             -xctestrun "$XCTESTRUN" \
             -destination "platform=iOS Simulator,id=$SIM_UDID" \
             -only-testing:PhtofxrTests \
-            -resultBundlePath app-tests.xcresult \
-            2>&1 | tee app-tests.log
-
-      - name: UI tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          xcodebuild test-without-building \
-            -xctestrun "$XCTESTRUN" \
-            -destination "platform=iOS Simulator,id=$SIM_UDID" \
             -only-testing:PhtofxrUITests \
             -parallel-testing-enabled NO \
             -test-timeouts-enabled YES \
             -default-test-execution-time-allowance 240 \
             -retry-tests-on-failure \
             -test-iterations 2 \
-            -resultBundlePath ui-tests.xcresult \
-            2>&1 | tee ui-tests.log
+            -collect-test-diagnostics never \
+            -resultBundlePath iphone-tests.xcresult \
+            2>&1 | tee iphone-tests.log
 
       - name: Upload results
         if: ${{ !cancelled() }}
@@ -163,10 +157,8 @@ jobs:
         with:
           name: iphone-results
           path: |
-            app-tests.log
-            ui-tests.log
-            app-tests.xcresult
-            ui-tests.xcresult
+            iphone-tests.log
+            iphone-tests.xcresult
           if-no-files-found: ignore
           retention-days: 7
 
@@ -210,6 +202,7 @@ jobs:
             -default-test-execution-time-allowance 240 \
             -retry-tests-on-failure \
             -test-iterations 2 \
+            -collect-test-diagnostics never \
             -resultBundlePath duo-ui-tests.xcresult \
             2>&1 | tee duo-ui-tests.log
 
@@ -265,6 +258,7 @@ jobs:
             -xctestrun "$XCTESTRUN" \
             -destination "platform=iOS Simulator,id=$SIM_UDID" \
             -only-testing:PhtofxrTests/PhotoKitIntegrationTests \
+            -collect-test-diagnostics never \
             -resultBundlePath integration.xcresult \
             2>&1 | tee integration.log
           grep "PHTOFXR" integration.log > photokit-report.txt || true
