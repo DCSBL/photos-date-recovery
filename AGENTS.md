@@ -47,6 +47,8 @@ positive and negative cases to `FilenameDateParserTests`. Never rename a format 
 - `ios.yml` builds once on the `xcode-27` runner, then runs app tests and UI tests on iPhone 17 and iPhone Duo,
   plus the PhotoKit integration test with seeded simulator photos.
 - UI tests use the fake library (`-phtofxrUITest`) and accessibility identifiers only.
+- `PhtofxrScreenshotTests` takes Dutch screenshots of the main screens; CI publishes the latest set on the
+  `screenshots` branch (replaced on every run). Name new screenshots `NN-name` so they sort in flow order.
 
 ## Cloud agents (Linux)
 

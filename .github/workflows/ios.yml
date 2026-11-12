@@ -151,6 +151,19 @@ jobs:
             -resultBundlePath iphone-tests.xcresult \
             2>&1 | tee iphone-tests.log
 
+      - name: Export screenshots
+        if: ${{ !cancelled() }}
+        run: python3 scripts/ci/export_screenshots.py iphone-tests.xcresult shots/iphone
+
+      - name: Upload screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: shots-iphone
+          path: shots
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Upload results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
@@ -205,6 +218,19 @@ jobs:
             -collect-test-diagnostics never \
             -resultBundlePath duo-ui-tests.xcresult \
             2>&1 | tee duo-ui-tests.log
+
+      - name: Export screenshots
+        if: ${{ !cancelled() }}
+        run: python3 scripts/ci/export_screenshots.py duo-ui-tests.xcresult shots/duo
+
+      - name: Upload screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: shots-duo
+          path: shots
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload results
         if: ${{ !cancelled() }}
@@ -280,3 +306,53 @@ jobs:
             integration.xcresult
           if-no-files-found: ignore
           retention-days: 7
+
+  # The Dutch screenshots of the last run, as one commit on the `screenshots` branch: browsable on GitHub
+  # without downloading artifacts. Same-repository runs only (fork and Dependabot tokens cannot push).
+  screenshots:
+    name: Publish screenshots
+    needs: [iphone, duo]
+    if: ${{ !cancelled() && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Download screenshots
+        uses: actions/download-artifact@v8
+        with:
+          pattern: shots-*
+          path: shots
+          merge-multiple: true
+
+      - name: Push to the screenshots branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SOURCE: ${{ github.event.pull_request.html_url || format('{0}/{1}/commit/{2}', github.server_url, github.repository, github.sha) }}
+        run: |
+          set -euo pipefail
+          cd shots
+          {
+            echo "# Phtofxr screenshots"
+            echo
+            echo "From ${SOURCE} (\`${SHA:0:7}\`), fake library, Dutch. Replaced on every run."
+            for device in iphone duo; do
+              [ -d "$device" ] || continue
+              case "$device" in iphone) title="iPhone 17" ;; duo) title="iPhone Duo" ;; esac
+              echo
+              echo "## $title"
+              for file in "$device"/*.png; do
+                echo
+                echo "### $(basename "$file" .png)"
+                echo
+                echo "<img src=\"$file\" width=\"320\">"
+              done
+            done
+          } > README.md
+          git init -q -b screenshots
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Screenshots for ${SHA:0:7}"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screenshots
+          echo "Published $(find . -name '*.png' | wc -l) screenshots to the screenshots branch."

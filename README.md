@@ -28,3 +28,5 @@ See [PLAN.md](PLAN.md) for the plan, the PhotoKit research and the decisions so 
 - `cd PhtofxrCore && swift test` — core logic (Linux or macOS).
 - GitHub Actions run the core tests on Linux and macOS, build the app once on the `xcode-27` runner and run
   the app, UI and PhotoKit integration tests on iPhone 17 and iPhone Duo simulators.
+- Screenshots of the latest run (Dutch, fake library) are on the
+  [`screenshots` branch](https://github.com/DCSBL/photos-date-recovery/tree/screenshots).
