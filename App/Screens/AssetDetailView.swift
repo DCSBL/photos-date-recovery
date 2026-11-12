@@ -3,6 +3,7 @@ import SwiftUI
 
 /// One photo: what Photos says now, what the filename says, and why the scan put it where it is.
 struct AssetDetailView: View {
+    @Environment(AppModel.self) private var model
     let item: Classification
 
     var body: some View {
@@ -14,6 +15,30 @@ struct AssetDetailView: View {
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
+            }
+
+            if item.category.isReviewable || item.category == .skipped {
+                Section("Your choice") {
+                    if item.category == .skipped {
+                        Button("Propose again", systemImage: "arrow.uturn.backward") {
+                            model.unskip([item.id])
+                        }
+                    } else if model.isKept(item.id) {
+                        Label("Kept: applied after you review and confirm", systemImage: "checkmark.circle.fill")
+                        Button("Undo keep", systemImage: "arrow.uturn.backward") {
+                            model.unkeep([item.id])
+                        }
+                    } else {
+                        Button("Keep this proposal", systemImage: "checkmark.circle") {
+                            model.keep([item.id])
+                        }
+                        .accessibilityIdentifier("keepItem")
+                        Button("Don't keep", systemImage: "xmark.circle") {
+                            model.skip([item.id])
+                        }
+                        .accessibilityIdentifier("skipItem")
+                    }
+                }
             }
 
             Section("Dates") {

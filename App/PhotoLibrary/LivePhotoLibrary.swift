@@ -36,6 +36,29 @@ final class LivePhotoLibrary: PhotoLibraryClient {
         }.value
     }
 
+    func apply(_ edits: [DateEdit]) async throws -> Set<String> {
+        guard !edits.isEmpty else { return [] }
+        // Reading the current captions can touch every asset; keep it off the main actor.
+        let prepared = await Task.detached(priority: .userInitiated) {
+            Self.prepare(edits)
+        }.value
+        let assets = prepared.assets
+        let captions = prepared.captions
+        let found = edits.filter { assets[$0.assetID] != nil }
+        guard !found.isEmpty else { return [] }
+        try await PHPhotoLibrary.shared().performChanges {
+            for edit in found {
+                guard let asset = assets[edit.assetID] else { continue }
+                let request = PHAssetChangeRequest(for: asset)
+                request.creationDate = edit.newCreationDate
+                if let caption = captions[edit.assetID] {
+                    request.caption = caption
+                }
+            }
+        }
+        return Set(found.map(\.assetID))
+    }
+
     func presentLimitedLibraryPicker() {
         let window = UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -59,6 +82,28 @@ final class LivePhotoLibrary: PhotoLibraryClient {
                 continuation.resume(returning: image)
             }
         }
+    }
+
+    /// The assets to change, and for each caption edit the full new caption (`.some(nil)` clears it).
+    nonisolated static func prepare(_ edits: [DateEdit]) -> (assets: [String: PHAsset], captions: [String: String?]) {
+        let options = PHFetchOptions()
+        options.includeHiddenAssets = true
+        options.prefetchAssetExtendedMetadata = true
+        let result = PHAsset.fetchAssets(withLocalIdentifiers: edits.map(\.assetID), options: options)
+        var assets: [String: PHAsset] = [:]
+        for index in 0..<result.count {
+            let asset = result.object(at: index)
+            assets[asset.localIdentifier] = asset
+        }
+        var captions: [String: String?] = [:]
+        for edit in edits where edit.captionLineToAdd != nil || edit.captionLineToRemove != nil {
+            guard let asset = assets[edit.assetID] else { continue }
+            var caption = asset.extendedMetadata.caption
+            if let line = edit.captionLineToRemove { caption = CaptionEditor.removing(line, from: caption) }
+            if let line = edit.captionLineToAdd { caption = CaptionEditor.adding(line, to: caption) }
+            captions[edit.assetID] = .some(caption)
+        }
+        return (assets, captions)
     }
 
     nonisolated static func access(_ status: PHAuthorizationStatus) -> LibraryAccess {

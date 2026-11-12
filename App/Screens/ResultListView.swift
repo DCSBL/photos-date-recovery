@@ -2,7 +2,8 @@ import PhtofxrCore
 import SwiftUI
 
 /// The photos of one result section, grouped by the day they were added (one import, usually), biggest
-/// import first. "To review" splits every import into its certain and uncertain proposals.
+/// import first. "To review" splits every import into its certain and uncertain proposals and offers keep and
+/// skip per photo (swipe) and per group (header menu); the review button collects what was kept.
 struct ResultListView: View {
     @Environment(AppModel.self) private var model
     let section: ResultSection
@@ -17,21 +18,21 @@ struct ResultListView: View {
                         Section {
                             rows(group.certain)
                         } header: {
-                            GroupHeader(group: group, category: .certain, count: group.certain.count, timeZone: model.timeZone)
+                            GroupHeader(group: group, category: .certain, items: group.certain, timeZone: model.timeZone)
                         }
                     }
                     if !group.uncertain.isEmpty {
                         Section {
                             rows(group.uncertain)
                         } header: {
-                            GroupHeader(group: group, category: .uncertain, count: group.uncertain.count, timeZone: model.timeZone)
+                            GroupHeader(group: group, category: .uncertain, items: group.uncertain, timeZone: model.timeZone)
                         }
                     }
                 } else {
                     Section {
                         rows(group.items)
                     } header: {
-                        GroupHeader(group: group, category: nil, count: group.items.count, timeZone: model.timeZone)
+                        GroupHeader(group: group, category: nil, items: group.items, timeZone: model.timeZone)
                     }
                 }
             }
@@ -42,20 +43,79 @@ struct ResultListView: View {
                 ContentUnavailableView("Nothing here", systemImage: section.systemImage)
             }
         }
+        .toolbar {
+            if section == .review {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Keep all certain proposals", systemImage: "checkmark.circle") {
+                        model.keep(model.certainIDs)
+                    }
+                    .accessibilityIdentifier("keepAllCertain")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Clear choices", systemImage: "circle.dashed") {
+                        model.unkeep(model.kept)
+                    }
+                    .disabled(model.kept.isEmpty)
+                    .accessibilityIdentifier("clearChoices")
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        model.isReviewing = true
+                    } label: {
+                        Text("Review \(model.kept.count) changes")
+                            .bold()
+                    }
+                    .disabled(model.kept.isEmpty || model.isWorking)
+                    .accessibilityIdentifier("openReview")
+                }
+            }
+        }
         .accessibilityIdentifier("resultList")
     }
 
     private func rows(_ items: [Classification]) -> some View {
         ForEach(items) { item in
-            ResultRow(item: item)
+            ResultRow(item: item, isKept: model.isKept(item.id))
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    if item.category.isReviewable {
+                        if model.isKept(item.id) {
+                            Button("Undo keep", systemImage: "arrow.uturn.backward") { model.unkeep([item.id]) }
+                        } else {
+                            Button("Keep", systemImage: "checkmark") { model.keep([item.id]) }
+                                .tint(.orange)
+                        }
+                    }
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    if item.category.isReviewable {
+                        Button("Don't keep", systemImage: "xmark") { model.skip([item.id]) }
+                            .tint(.gray)
+                    } else if item.category == .skipped {
+                        Button("Propose again", systemImage: "arrow.uturn.backward") { model.unskip([item.id]) }
+                            .tint(.orange)
+                    }
+                }
+                .accessibilityActions {
+                    if item.category.isReviewable {
+                        if model.isKept(item.id) {
+                            Button("Undo keep") { model.unkeep([item.id]) }
+                        } else {
+                            Button("Keep") { model.keep([item.id]) }
+                        }
+                        Button("Don't keep") { model.skip([item.id]) }
+                    } else if item.category == .skipped {
+                        Button("Propose again") { model.unskip([item.id]) }
+                    }
+                }
         }
     }
 }
 
 private struct GroupHeader: View {
+    @Environment(AppModel.self) private var model
     let group: ImportGroup
     let category: DateCategory?
-    let count: Int
+    let items: [Classification]
     let timeZone: TimeZone
 
     var body: some View {
@@ -70,14 +130,37 @@ private struct GroupHeader: View {
                 Text(category.title)
             }
             Spacer()
-            Text(count, format: .number)
+            Text(items.count, format: .number)
+            if category != nil {
+                Menu {
+                    Button("Keep all \(items.count)", systemImage: "checkmark.circle") {
+                        model.keep(items.map(\.id))
+                    }
+                    .accessibilityIdentifier("keepGroup")
+                    Button("Don't keep all \(items.count)", systemImage: "xmark.circle") {
+                        model.skip(items.map(\.id))
+                    }
+                    Button("Clear choices", systemImage: "circle") {
+                        model.unkeep(items.map(\.id))
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .accessibilityLabel(Text("Actions for this group"))
+                }
+                .accessibilityIdentifier("groupMenu")
+            } else if items.first?.category == .skipped {
+                Button("Propose all again") {
+                    model.unskip(items.map(\.id))
+                }
+                .font(.footnote)
+            }
         }
-        .accessibilityElement(children: .combine)
     }
 }
 
 private struct ResultRow: View {
     let item: Classification
+    let isKept: Bool
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -94,8 +177,15 @@ private struct ResultRow: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            Spacer(minLength: 0)
+            if isKept {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.tint)
+                    .accessibilityHidden(true)
+            }
         }
         .accessibilityElement(children: .combine)
+        .accessibilityValue(isKept ? Text("Kept") : Text(verbatim: ""))
         .accessibilityIdentifier("row.\(item.id)")
     }
 

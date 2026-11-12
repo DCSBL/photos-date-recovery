@@ -18,6 +18,10 @@ struct ContentView: View {
                 .navigationTitle("Phtofxr")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
+                        Button("History", systemImage: "clock.arrow.circlepath") { model.isShowingHistory = true }
+                            .accessibilityIdentifier("history")
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button("Settings", systemImage: "gearshape") { showsSettings = true }
                             .accessibilityIdentifier("settings")
                     }
@@ -43,6 +47,12 @@ struct ContentView: View {
         .navigationSplitViewStyle(.balanced)
         .sheet(isPresented: $showsSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: Binding(get: { model.isReviewing }, set: { model.isReviewing = $0 })) {
+            ApplyReviewView()
+        }
+        .sheet(isPresented: Binding(get: { model.isShowingHistory }, set: { model.isShowingHistory = $0 })) {
+            HistoryView()
         }
         .onChange(of: section) {
             selectedItem = nil

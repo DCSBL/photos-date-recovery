@@ -219,9 +219,9 @@ iPad krijgt pas een eigen job als iPad echt een doel wordt. CI draait op pull re
 
 ## 11. Fases (elke fase = één PR)
 
-1. **Skelet + Core + CI**: project, formatencatalogus, parser, classificatie met tests, workflows. De app scant alleen-lezend en toont categorieën, lijst, detail en diagnose.
-2. **Beslissen + controleren + toepassen**: bulkselectie, controlescherm, toepassen in blokken, logboek, bijschrift.
-3. **Geschiedenis + terugdraaien + instellingen** (formaten, drempels).
+1. **Skelet + Core + CI** (klaar, PR #1): project, formatencatalogus, parser, classificatie met tests, workflows. De app scant alleen-lezend en toont categorieën, lijst, detail en diagnose.
+2. **Beslissen + controleren + toepassen + terugdraaien**: bewaren en niet bewaren per foto (vegen, detail) en in bulk (per import, alle zekere), controlescherm, toepassen in blokken van 1000, logboek, bijschrift, geschiedenis met terugdraaien per batch.
+3. **Instellingen afmaken** (drempels instelbaar) en kleine verbeteringen uit het testen.
 4. **Albums kiezen + beperkte toegang afmaken**.
 5. **Op je toestel**: diagnose A1–A6, bijsturen, daarna TestFlight via Xcode Cloud.
 
