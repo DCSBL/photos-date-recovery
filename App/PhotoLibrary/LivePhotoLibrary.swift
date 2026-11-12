@@ -52,7 +52,9 @@ final class LivePhotoLibrary: PhotoLibraryClient {
                 let request = PHAssetChangeRequest(for: asset)
                 request.creationDate = edit.newCreationDate
                 if let caption = captions[edit.assetID] {
-                    request.caption = caption
+                    // Setting nil leaves the caption unchanged in practice (seen in the simulator, iOS 27.2),
+                    // so an empty string clears it.
+                    request.caption = caption ?? ""
                 }
             }
         }
