@@ -1,0 +1,1019 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ earlier" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ eerder"
+          }
+        }
+      }
+    },
+    "%@ later" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ later"
+          }
+        }
+      }
+    },
+    "A proposal is only certain when the date in Photos looks filled in: the moment of import, a day full of photos whose names point elsewhere, or a camera's reset date." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een voorstel is alleen zeker als de datum in Foto's ingevuld lijkt: het moment van importeren, een dag vol foto's waarvan de naam ergens anders naar wijst, of de resetdatum van een camera."
+          }
+        }
+      }
+    },
+    "Access to all photos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegang tot alle foto's"
+          }
+        }
+      }
+    },
+    "Access to selected photos only" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen toegang tot gekozen foto's"
+          }
+        }
+      }
+    },
+    "Added %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegevoegd %@"
+          }
+        }
+      }
+    },
+    "Added on an unknown day" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegevoegd op een onbekende dag"
+          }
+        }
+      }
+    },
+    "Added to the library" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegevoegd aan de bibliotheek"
+          }
+        }
+      }
+    },
+    "Added: %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegevoegd: %@"
+          }
+        }
+      }
+    },
+    "Already correct" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klopt al"
+          }
+        }
+      }
+    },
+    "Android camera" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Android-camera"
+          }
+        }
+      }
+    },
+    "Android screenshot" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Android-screenshot"
+          }
+        }
+      }
+    },
+    "Asset and resource name differ" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam van foto en bestand verschillen"
+          }
+        }
+      }
+    },
+    "Bare Unix timestamp" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kale Unix-tijdstempel"
+          }
+        }
+      }
+    },
+    "Caption: %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijschrift: %@"
+          }
+        }
+      }
+    },
+    "Category" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorie"
+          }
+        }
+      }
+    },
+    "Certain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeker"
+          }
+        }
+      }
+    },
+    "Change selection" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selectie aanpassen"
+          }
+        }
+      }
+    },
+    "Changed by Phtofxr" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Door Phtofxr aangepast"
+          }
+        }
+      }
+    },
+    "Created: %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemaakt: %@"
+          }
+        }
+      }
+    },
+    "DJI drone" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DJI-drone"
+          }
+        }
+      }
+    },
+    "Date in the name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum in de naam"
+          }
+        }
+      }
+    },
+    "Dates" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datums"
+          }
+        }
+      }
+    },
+    "Day-month-year" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dag-maand-jaar"
+          }
+        }
+      }
+    },
+    "Diagnostics" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnose"
+          }
+        }
+      }
+    },
+    "Difference" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschil"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar"
+          }
+        }
+      }
+    },
+    "Dropbox camera upload" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dropbox-camera-upload"
+          }
+        }
+      }
+    },
+    "Filename" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsnaam"
+          }
+        }
+      }
+    },
+    "Filename formats" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsnaamformaten"
+          }
+        }
+      }
+    },
+    "In Photos now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu in Foto's"
+          }
+        }
+      }
+    },
+    "Items" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderdelen"
+          }
+        }
+      }
+    },
+    "Last scan" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste scan"
+          }
+        }
+      }
+    },
+    "Library" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliotheek"
+          }
+        }
+      }
+    },
+    "Mac screenshot" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac-screenshot"
+          }
+        }
+      }
+    },
+    "Minimum year" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimumjaar"
+          }
+        }
+      }
+    },
+    "Modified: %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewijzigd: %@"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam"
+          }
+        }
+      }
+    },
+    "No access to your photos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen toegang tot je foto's"
+          }
+        }
+      }
+    },
+    "No date in name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen datum in naam"
+          }
+        }
+      }
+    },
+    "No filename" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen bestandsnaam"
+          }
+        }
+      }
+    },
+    "No photo selected" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen foto gekozen"
+          }
+        }
+      }
+    },
+    "Nothing here" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niets te zien"
+          }
+        }
+      }
+    },
+    "OneDrive camera upload" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OneDrive-camera-upload"
+          }
+        }
+      }
+    },
+    "Only the photos you chose are scanned." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen de foto's die je hebt gekozen worden gescand."
+          }
+        }
+      }
+    },
+    "Open Settings" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Instellingen"
+          }
+        }
+      }
+    },
+    "Other" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overig"
+          }
+        }
+      }
+    },
+    "Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto"
+          }
+        }
+      }
+    },
+    "Photos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto's"
+          }
+        }
+      }
+    },
+    "Phtofxr" : {
+      "shouldTranslate" : false
+    },
+    "Phtofxr already changed this date." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr heeft deze datum al aangepast."
+          }
+        }
+      }
+    },
+    "Phtofxr asks for access to your photos when you start the first scan." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr vraagt toegang tot je foto's zodra je de eerste scan start."
+          }
+        }
+      }
+    },
+    "Phtofxr compares the date in each filename with the date in Photos." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr vergelijkt de datum in elke bestandsnaam met de datum in Foto's."
+          }
+        }
+      }
+    },
+    "Phtofxr tries the formats from top to bottom and uses the first that fits." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr probeert de formaten van boven naar beneden en gebruikt het eerste dat past."
+          }
+        }
+      }
+    },
+    "Phtofxr works entirely on this device. It never connects to the internet." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr werkt volledig op dit apparaat en maakt nooit verbinding met internet."
+          }
+        }
+      }
+    },
+    "Proposed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorstel"
+          }
+        }
+      }
+    },
+    "Read in" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelezen in"
+          }
+        }
+      }
+    },
+    "Reads the names and dates of every item in your library. Changes nothing." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leest de namen en datums van alles in je bibliotheek. Verandert niets."
+          }
+        }
+      }
+    },
+    "Recognized as" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herkend als"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultaat"
+          }
+        }
+      }
+    },
+    "Rules" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regels"
+          }
+        }
+      }
+    },
+    "Run diagnostics" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start diagnose"
+          }
+        }
+      }
+    },
+    "Sample" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steekproef"
+          }
+        }
+      }
+    },
+    "Scan" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan"
+          }
+        }
+      }
+    },
+    "Scan again" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opnieuw scannen"
+          }
+        }
+      }
+    },
+    "Scan library" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan bibliotheek"
+          }
+        }
+      }
+    },
+    "Scan your library" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan je bibliotheek"
+          }
+        }
+      }
+    },
+    "Scanned in %@." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescand in %@."
+          }
+        }
+      }
+    },
+    "Scanning only reads names and dates. Nothing changes in your library." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannen leest alleen namen en datums. Er verandert niets in je bibliotheek."
+          }
+        }
+      }
+    },
+    "Scanning…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezig met scannen…"
+          }
+        }
+      }
+    },
+    "Screenshots" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screenshots"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen"
+          }
+        }
+      }
+    },
+    "Settings changed. Scan again to update the result." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen gewijzigd. Scan opnieuw om het resultaat bij te werken."
+          }
+        }
+      }
+    },
+    "Skipped" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overgeslagen"
+          }
+        }
+      }
+    },
+    "Suspicious" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verdacht"
+          }
+        }
+      }
+    },
+    "The date in Photos falls on a day with %lld photos whose names point elsewhere." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in Foto's valt op een dag met %lld foto's waarvan de naam ergens anders naar wijst."
+          }
+        }
+      }
+    },
+    "The date in Photos is the moment it was added: it was probably filled in at import." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in Foto's is het moment van toevoegen: die is waarschijnlijk bij het importeren ingevuld."
+          }
+        }
+      }
+    },
+    "The date in Photos looks like a camera whose clock was reset." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in Foto's lijkt op een camera waarvan de klok gereset is."
+          }
+        }
+      }
+    },
+    "The date in Photos matches the filename." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in Foto's klopt met de bestandsnaam."
+          }
+        }
+      }
+    },
+    "The date in the filename does not exist." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in de bestandsnaam bestaat niet."
+          }
+        }
+      }
+    },
+    "The date in the filename is earlier than the minimum year." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in de bestandsnaam ligt vóór het minimumjaar."
+          }
+        }
+      }
+    },
+    "The date in the filename is in the future." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datum in de bestandsnaam ligt in de toekomst."
+          }
+        }
+      }
+    },
+    "The dates are between a day and a week apart." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De datums liggen tussen een dag en een week uit elkaar."
+          }
+        }
+      }
+    },
+    "The filename has no recognizable date." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bestandsnaam bevat geen herkenbare datum."
+          }
+        }
+      }
+    },
+    "The name has no time of day, so the current time is kept." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De naam bevat geen tijd, dus de huidige tijd blijft staan."
+          }
+        }
+      }
+    },
+    "The photo has its own date, and the filename disagrees." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De foto heeft een eigen datum, en de bestandsnaam zegt iets anders."
+          }
+        }
+      }
+    },
+    "The photo has no date in Photos." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De foto heeft geen datum in Foto's."
+          }
+        }
+      }
+    },
+    "This filename format is not always reliable." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit bestandsnaamformaat is niet altijd betrouwbaar."
+          }
+        }
+      }
+    },
+    "To review" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te beoordelen"
+          }
+        }
+      }
+    },
+    "Uncertain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onzeker"
+          }
+        }
+      }
+    },
+    "Unknown" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekend"
+          }
+        }
+      }
+    },
+    "Videos" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video's"
+          }
+        }
+      }
+    },
+    "WhatsApp export" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WhatsApp-export"
+          }
+        }
+      }
+    },
+    "Why" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarom"
+          }
+        }
+      }
+    },
+    "Without added date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonder toegevoegd-datum"
+          }
+        }
+      }
+    },
+    "Without asset filename" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonder bestandsnaam (foto)"
+          }
+        }
+      }
+    },
+    "Without resource filename" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonder bestandsnaam (bestand)"
+          }
+        }
+      }
+    },
+    "You chose not to keep this proposal." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt gekozen dit voorstel niet te bewaren."
+          }
+        }
+      }
+    },
+    "a day to a week apart" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "een dag tot een week verschil"
+          }
+        }
+      }
+    },
+    "less than a day apart" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "minder dan een dag verschil"
+          }
+        }
+      }
+    },
+    "more than a week apart" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "meer dan een week verschil"
+          }
+        }
+      }
+    },
+    "no date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geen datum"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

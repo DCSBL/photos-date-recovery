@@ -1,0 +1,47 @@
+# PhtofxrCore tests on Linux: pure Foundation, so `swift test` runs in the official Swift container in a few
+# minutes. The fastest signal on every push; the same tests also run on macOS in ios.yml (`core-macos`),
+# against the Foundation the iPhone uses.
+
+name: Core tests (Linux)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: core-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    name: PhtofxrCore tests (Linux)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: swift:6.2-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Swift version
+        run: swift --version
+
+      - name: swift test
+        working-directory: PhtofxrCore
+        shell: bash # pipefail: keep swift's exit code through tee
+        run: swift test 2>&1 | tee swift-test.log
+
+      - name: Upload test log
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: core-linux-log
+          path: PhtofxrCore/swift-test.log
+          if-no-files-found: ignore
+          retention-days: 7

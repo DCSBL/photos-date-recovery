@@ -1,0 +1,25 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "shouldTranslate" : false
+    },
+    "NSPhotoLibraryUsageDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr reads the original filenames and dates of your photos to find wrong dates. It only changes a date after you confirm."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phtofxr leest de originele bestandsnamen en datums van je foto's om verkeerde datums te vinden. Een datum verandert pas nadat jij dat bevestigt."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,0 +1,29 @@
+# Quick checks that need no toolchain: the app must never reach the internet (PLAN.md §6).
+
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  no-network:
+    name: No networking code
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Guard
+        run: bash scripts/ci/no-network-guard.sh
