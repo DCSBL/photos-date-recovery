@@ -61,7 +61,7 @@ enum DatePartStyle {
 
     /// A date written out in the user's language, with the same marks on year, month, day and time.
     static func date(_ date: Date, style: Date.FormatStyle, withoutColor: Bool) -> AttributedString {
-        var text = date.formatted(style.attributed)
+        var text = date.formatted(style.attributedStyle)
         let fields: [(AttributeScopes.FoundationAttributes.DateFieldAttribute.Value, DateSpan.Part)] = [
             (.year, .year), (.month, .month), (.day, .day),
             (.hour, .hour), (.amPM, .hour), (.minute, .minute),

@@ -80,8 +80,9 @@ final class AppModel {
         access = library.currentAccess()
         settings = Self.loadSettings(from: defaults)
         skipped = skippedStore.load() ?? []
-        manualDates = manualStore.load() ?? [:]
-        kept = Set(manualDates.keys)
+        let picks = manualStore.load() ?? [:]
+        manualDates = picks
+        kept = Set(picks.keys)
         journalState = JournalState((try? journal.load()) ?? [])
         addsCaption = defaults.object(forKey: Self.captionKey) as? Bool ?? true
     }
