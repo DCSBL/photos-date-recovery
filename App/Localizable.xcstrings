@@ -1114,6 +1114,16 @@
         }
       }
     },
+    "Show history" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon geschiedenis"
+          }
+        }
+      }
+    },
     "Skipped" : {
       "localizations" : {
         "nl" : {

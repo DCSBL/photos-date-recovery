@@ -77,8 +77,7 @@ final class PhtofxrScreenshotTests: XCTestCase {
         XCTAssertTrue(element(app, "applyDone").waitForExistence(timeout: 30))
         snapshot(app, "09-toegepast")
 
-        element(app, "closeReview").tap()
-        let history = element(app, "history")
+        let history = element(app, "showHistory")
         XCTAssertTrue(history.waitForExistence(timeout: 15))
         history.tap()
         XCTAssertTrue(element(app, "revertBatch").waitForExistence(timeout: 15))

@@ -6,6 +6,8 @@ import SwiftUI
 struct ApplyReviewView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
+    /// Pushed from the root rather than by a link inside the result, so a revert that changes the result keeps it open.
+    @State private var showsHistory = false
 
     var body: some View {
         @Bindable var model = model
@@ -20,8 +22,8 @@ struct ApplyReviewView: View {
                         }
                         .accessibilityIdentifier("applyProgress")
                     }
-                case .finished(let changed, let failed, _):
-                    resultSection(changed: changed, failed: failed)
+                case .finished(let changed, let failed, let reverted):
+                    resultSection(changed: changed, failed: failed, reverted: reverted)
                 case .failed(let message):
                     Section {
                         Label("Nothing was changed", systemImage: "exclamationmark.triangle")
@@ -36,6 +38,9 @@ struct ApplyReviewView: View {
             }
             .navigationTitle("Review")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $showsHistory) {
+                HistoryList()
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
@@ -114,15 +119,27 @@ struct ApplyReviewView: View {
     }
 
     @ViewBuilder
-    private func resultSection(changed: Int, failed: Int) -> some View {
+    private func resultSection(changed: Int, failed: Int, reverted: Bool) -> some View {
         Section {
-            Label("\(changed) dates changed", systemImage: "checkmark.circle.fill")
-                .accessibilityIdentifier("applyDone")
+            if reverted {
+                Label("\(changed) dates reverted", systemImage: "arrow.uturn.backward.circle.fill")
+            } else {
+                Label("\(changed) dates changed", systemImage: "checkmark.circle.fill")
+                    .accessibilityIdentifier("applyDone")
+            }
             if failed > 0 {
                 Label("\(failed) not changed", systemImage: "exclamationmark.triangle")
             }
         } footer: {
             Text("You can revert this batch under History.")
+        }
+        Section {
+            Button {
+                showsHistory = true
+            } label: {
+                Label("Show history", systemImage: "clock.arrow.circlepath")
+            }
+            .accessibilityIdentifier("showHistory")
         }
     }
 }

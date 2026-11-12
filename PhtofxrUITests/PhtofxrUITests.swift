@@ -115,9 +115,9 @@ final class PhtofxrApplyUITests: XCTestCase {
         XCTAssertTrue(apply.waitForExistence(timeout: 15))
         apply.tap()
         XCTAssertTrue(element(app, "applyDone").waitForExistence(timeout: 30), "Applying did not finish")
-        element(app, "closeReview").tap()
 
-        let history = element(app, "history")
+        // The sidebar's History button is hidden while a list is pushed on a narrow window; the result offers it.
+        let history = element(app, "showHistory")
         XCTAssertTrue(history.waitForExistence(timeout: 15))
         history.tap()
         let revert = element(app, "revertBatch")
