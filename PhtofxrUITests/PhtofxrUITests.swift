@@ -47,8 +47,15 @@ final class PhtofxrUITests: XCTestCase {
         XCTAssertTrue(settings.waitForExistence(timeout: 60))
         settings.tap()
 
+        // Diagnostics sits below the format list; the form only creates rows once they scroll into view.
+        XCTAssertTrue(app.switches["format.pixel"].waitForExistence(timeout: 15))
         let diagnostics = element(app, "diagnostics")
-        XCTAssertTrue(diagnostics.waitForExistence(timeout: 15))
+        var swipes = 0
+        while !diagnostics.exists && swipes < 10 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(diagnostics.waitForExistence(timeout: 5), "Diagnostics row not found after scrolling")
         diagnostics.tap()
 
         let run = element(app, "runDiagnostics")
