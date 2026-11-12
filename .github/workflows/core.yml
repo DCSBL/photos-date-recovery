@@ -8,8 +8,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    # claude/** until the repository has a main branch to open pull requests against.
-    branches: [main, 'claude/**']
+    branches: [main]
   workflow_dispatch:
 
 concurrency:

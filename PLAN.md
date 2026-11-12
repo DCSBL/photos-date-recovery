@@ -215,7 +215,7 @@ Snelheid:
 - UI-tests klein houden
 - streefwaarde: hele run < 15 min
 
-iPad krijgt pas een eigen job als iPad echt een doel wordt. Zolang er geen `main` is, draait CI op pushes naar `claude/**`-branches.
+iPad krijgt pas een eigen job als iPad echt een doel wordt. CI draait op pull requests naar `main` en op elke push naar `main`.
 
 ## 11. Fases (elke fase = één PR)
 
