@@ -164,6 +164,66 @@ struct AppModelTests {
         #expect(library.captions.isEmpty)
     }
 
+    @Test("A picked date works without a date in the name, survives a relaunch and is applied like a proposal")
+    func pickedDate() async throws {
+        let storage = temporaryStorage()
+        let (model, library) = makeModel(storage: storage)
+        await model.scan()
+        // IMG_0003.JPG was imported right after 2014-03-03 20.17.02.jpg.
+        let id = "import-11-3"
+        #expect(model.item(id: id)?.category == .noDateInName)
+        let previous = try #require(model.previousPhotoDate(for: id))
+        #expect(previous.id == "import-11-2")
+        #expect(previous.date == model.item(id: "import-11-2")?.proposedDate)
+
+        model.setManualDate(previous.date, for: id)
+        #expect(model.isKept(id))
+        let change = try #require(model.plannedChanges.first { $0.assetID == id })
+        #expect(change.to == previous.date)
+        #expect(change.formatID == PlannedChange.manualFormatID)
+
+        let (relaunched, _) = makeModel(storage: storage)
+        await relaunched.scan()
+        #expect(relaunched.manualDates[id] == previous.date)
+        #expect(relaunched.isKept(id))
+
+        await model.applyKept()
+        #expect(model.workState == .finished(changed: 1, failed: 0, reverted: false))
+        #expect(model.manualDates.isEmpty)
+        #expect(library.assets.first { $0.id == id }?.creationDate == previous.date)
+        #expect(model.item(id: id)?.category == .changedByApp)
+        #expect(!model.canPickDate(for: id))
+    }
+
+    @Test("A picked date wins over the proposal; undo keep or don't keep takes it away")
+    func pickedDateOverProposal() async throws {
+        let (model, _) = makeModel()
+        await model.scan()
+        let picked = Date(timeIntervalSince1970: 1_300_000_000)
+        model.setManualDate(picked, for: "conflict")
+        #expect(model.plannedChanges.first { $0.assetID == "conflict" }?.to == picked)
+        let item = try #require(model.item(id: "conflict"))
+        #expect(model.targetDate(of: item) == picked)
+
+        model.unkeep(["conflict"])
+        #expect(model.manualDates.isEmpty)
+        #expect(model.plannedChanges.isEmpty)
+
+        model.setManualDate(picked, for: "conflict")
+        await model.skip(["conflict"]).value
+        #expect(model.manualDates.isEmpty)
+        #expect(!model.isKept("conflict"))
+    }
+
+    @Test("Imports can be looked up per section")
+    func importLookup() async throws {
+        let (model, _) = makeModel()
+        await model.scan()
+        let first = try #require(model.groups(in: .review).first)
+        #expect(model.group(id: first.id, in: .review) == first)
+        #expect(model.group(id: "1900-1-1", in: .review) == nil)
+    }
+
     @Test("Nothing kept, nothing applied")
     func applyNothing() async {
         let (model, _) = makeModel()

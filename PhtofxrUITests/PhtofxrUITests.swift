@@ -33,11 +33,63 @@ final class PhtofxrUITests: XCTestCase {
         XCTAssertTrue(element(app, "section.noDateInName").exists)
         review.tap()
 
+        let october = element(app, "import.2016-10-11")
+        XCTAssertTrue(october.waitForExistence(timeout: 15), "The 11 October import is not listed")
+        october.tap()
+
         let row = element(app, "row.import-11-0")
         XCTAssertTrue(row.waitForExistence(timeout: 15), "First photo of the 11 October import is not listed")
         row.tap()
 
         XCTAssertTrue(element(app, "proposedDate").waitForExistence(timeout: 15), "Detail shows no proposed date")
+        XCTAssertTrue(element(app, "filename").exists)
+    }
+
+    @MainActor
+    func testPickDateForPhotoWithoutDateInName() {
+        let app = launch()
+        let scan = element(app, "scan")
+        XCTAssertTrue(scan.waitForExistence(timeout: 60))
+        scan.tap()
+
+        let noDate = element(app, "section.noDateInName")
+        XCTAssertTrue(noDate.waitForExistence(timeout: 30))
+        noDate.tap()
+        let october = element(app, "import.2016-10-11")
+        XCTAssertTrue(october.waitForExistence(timeout: 15))
+        october.tap()
+        let row = element(app, "row.import-11-3")
+        XCTAssertTrue(row.waitForExistence(timeout: 15), "IMG_0003.JPG is not listed")
+        row.tap()
+
+        let otherDate = element(app, "otherDate")
+        scroll(app, to: otherDate)
+        otherDate.tap()
+
+        // IMG_0003.JPG was imported right after 2014-03-03 20.17.02.jpg.
+        let previous = element(app, "pick.previous")
+        XCTAssertTrue(previous.waitForExistence(timeout: 15), "No quick pick from the previous photo")
+        let save = element(app, "saveDate")
+        XCTAssertFalse(save.isEnabled, "Keeping the date Photos already has should not be possible")
+        previous.tap()
+        XCTAssertTrue(save.isEnabled)
+        save.tap()
+
+        let kept = element(app, "keptLabel")
+        scroll(app, to: kept)
+        XCTAssertTrue(element(app, "manualDate").exists, "Detail does not show the picked date")
+        XCTAssertTrue(element(app, "undoKeep").exists)
+    }
+
+    /// Forms only create rows once they scroll into view.
+    @MainActor
+    private func scroll(_ app: XCUIApplication, to target: XCUIElement) {
+        var swipes = 0
+        while !target.waitForExistence(timeout: 2) && swipes < 8 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(target.exists, "\(target) not found after scrolling")
     }
 
     @MainActor
