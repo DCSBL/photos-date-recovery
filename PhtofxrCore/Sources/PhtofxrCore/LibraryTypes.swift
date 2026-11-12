@@ -46,14 +46,17 @@ public struct AssetDiagnostics: Identifiable, Hashable, Sendable {
     }
 }
 
-/// Totals over the whole library plus a spread-out sample, for checking the PhotoKit assumptions (PLAN.md §8).
+/// Checks of the PhotoKit assumptions (PLAN.md §8). Asset names and added dates are counted over the whole
+/// library (as fast as a scan); resource names are slow to read, so they are compared on a spread-out sample.
 public struct DiagnosticsReport: Hashable, Sendable {
     public var total = 0
     public var missingAssetFilename = 0
-    public var missingResourceFilename = 0
-    /// Asset-level and primary resource name both present but different.
-    public var differentFilenames = 0
     public var missingAddedDate = 0
+    /// How many photos the resource-name comparison looked at.
+    public var sampleSize = 0
+    public var missingResourceFilename = 0
+    /// Asset-level and primary resource name both present but different, within the sample.
+    public var differentFilenames = 0
     public var duration: Duration = .zero
     public var samples: [AssetDiagnostics] = []
 

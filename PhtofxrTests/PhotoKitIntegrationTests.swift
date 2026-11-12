@@ -73,7 +73,7 @@ struct PhotoKitIntegrationTests {
 
     @Test("Diagnostics read the whole library")
     func diagnostics() async {
-        let report = await LivePhotoLibrary().diagnostics(sampleSize: 10)
+        let report = await LivePhotoLibrary().diagnostics(sampleSize: 10) { _ in }
         print("PHTOFXR diagnostics", report.total, report.missingAssetFilename, report.missingResourceFilename, report.differentFilenames, report.missingAddedDate, report.duration)
         for sample in report.samples {
             print("PHTOFXR sample", sample.assetFilename ?? "nil", sample.resourceFilenames, String(describing: sample.addedDate))

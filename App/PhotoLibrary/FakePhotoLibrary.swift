@@ -29,10 +29,12 @@ final class FakePhotoLibrary: PhotoLibraryClient {
 
     func thumbnail(for id: String, pixelSide: CGFloat) async -> UIImage? { nil }
 
-    func diagnostics(sampleSize: Int) async -> DiagnosticsReport {
+    func diagnostics(sampleSize: Int, progress: @escaping @Sendable (Double) -> Void) async -> DiagnosticsReport {
+        progress(1)
         var report = DiagnosticsReport()
         report.total = assets.count
         report.missingAssetFilename = assets.filter { $0.filename == nil }.count
+        report.sampleSize = min(sampleSize, assets.count)
         report.missingResourceFilename = report.missingAssetFilename
         report.missingAddedDate = assets.filter { $0.addedDate == nil }.count
         report.samples = assets.prefix(sampleSize).map { asset in

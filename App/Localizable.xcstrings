@@ -291,6 +291,26 @@
         }
       }
     },
+    "Checking…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren…"
+          }
+        }
+      }
+    },
+    "Checks every photo for a filename and an added date, and compares the photo's name with its file's name on %lld photos spread over the library. Takes about as long as a scan. Changes nothing." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleert bij elke foto of er een bestandsnaam en een toegevoegd-datum is, en vergelijkt bij %lld foto's verspreid over de bibliotheek de naam van de foto met die van het bestand. Duurt ongeveer even lang als een scan. Verandert niets."
+          }
+        }
+      }
+    },
     "Clear choices" : {
       "localizations" : {
         "nl" : {
@@ -407,6 +427,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dropbox-camera-upload"
+          }
+        }
+      }
+    },
+    "Examples" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbeelden"
           }
         }
       }
@@ -547,6 +577,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bibliotheek"
+          }
+        }
+      }
+    },
+    "Loading %lld photos…" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld foto's laden…"
           }
         }
       }
@@ -767,6 +807,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Foto's"
+          }
+        }
+      }
+    },
+    "Photos compared" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergeleken foto's"
           }
         }
       }

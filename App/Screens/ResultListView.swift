@@ -8,10 +8,41 @@ struct ResultListView: View {
     @Environment(AppModel.self) private var model
     let section: ResultSection
     @Binding var selection: Classification.ID?
+    /// The section whose list has been built. Big sections (thousands of photos) take a moment to lay out on the
+    /// main actor, so they show a spinner first instead of a screen that seems to ignore the tap.
+    @State private var shownSection: ResultSection?
+
+    /// Up to this many photos the list appears at once; above it the spinner shows first.
+    static let instantLimit = 1500
 
     var body: some View {
+        let count = model.count(of: section)
+        let ready = shownSection == section || count < Self.instantLimit
+        Group {
+            if ready {
+                list
+            } else {
+                // The system spinner keeps turning while the list is built.
+                ProgressView {
+                    Text("Loading \(count) photos…")
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityIdentifier("listLoading")
+            }
+        }
+        .navigationTitle(section.title)
+        .task(id: section) {
+            guard shownSection != section else { return }
+            // Give the spinner a frame on screen before the list is built.
+            try? await Task.sleep(for: .milliseconds(50))
+            shownSection = section
+        }
+        .toolbar { toolbar }
+    }
+
+    private var list: some View {
         let groups = model.groups(in: section)
-        List(selection: $selection) {
+        return List(selection: $selection) {
             ForEach(groups) { group in
                 if section == .review {
                     if !group.certain.isEmpty {
@@ -37,40 +68,41 @@ struct ResultListView: View {
                 }
             }
         }
-        .navigationTitle(section.title)
         .overlay {
             if groups.isEmpty {
                 ContentUnavailableView("Nothing here", systemImage: section.systemImage)
             }
         }
-        .toolbar {
-            if section == .review {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Keep all certain proposals", systemImage: "checkmark.circle") {
-                        model.keep(model.certainIDs)
-                    }
-                    .accessibilityIdentifier("keepAllCertain")
+        .accessibilityIdentifier("resultList")
+    }
+
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if section == .review {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Keep all certain proposals", systemImage: "checkmark.circle") {
+                    model.keep(model.certainIDs)
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Clear choices", systemImage: "circle.dashed") {
-                        model.unkeep(model.kept)
-                    }
-                    .disabled(model.kept.isEmpty)
-                    .accessibilityIdentifier("clearChoices")
+                .accessibilityIdentifier("keepAllCertain")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Clear choices", systemImage: "circle.dashed") {
+                    model.unkeep(model.kept)
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        model.isReviewing = true
-                    } label: {
-                        Text("Review \(model.kept.count) changes")
-                            .bold()
-                    }
-                    .disabled(model.kept.isEmpty || model.isWorking)
-                    .accessibilityIdentifier("openReview")
+                .disabled(model.kept.isEmpty)
+                .accessibilityIdentifier("clearChoices")
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button {
+                    model.isReviewing = true
+                } label: {
+                    Text("Review \(model.kept.count) changes")
+                        .bold()
                 }
+                .disabled(model.kept.isEmpty || model.isWorking)
+                .accessibilityIdentifier("openReview")
             }
         }
-        .accessibilityIdentifier("resultList")
     }
 
     private func rows(_ items: [Classification]) -> some View {
