@@ -45,11 +45,16 @@ public final class FilenameDateParser: @unchecked Sendable {
         format: FilenameFormat
     ) -> FilenameDate? {
         var values: [FilenameFormat.Field: String] = [:]
+        var spans: [DateSpan] = []
         for (offset, field) in fields.enumerated() {
             let groupRange = match.range(at: offset + 1)
             guard groupRange.location != NSNotFound, let range = Range(groupRange, in: filename) else { continue }
             values[field] = String(filename[range])
+            if let part = Self.part(for: field) {
+                spans.append(DateSpan(part: part, utf16Range: groupRange.location..<(groupRange.location + groupRange.length)))
+            }
         }
+        spans.sort { $0.utf16Range.lowerBound < $1.utf16Range.lowerBound }
 
         if let millis = values[.epochMilliseconds].flatMap(Double.init) {
             return .utc(formatID: format.id, epochSeconds: millis / 1000)
@@ -75,7 +80,20 @@ public final class FilenameDateParser: @unchecked Sendable {
                 millisecond: millisecond
             )
         }
-        return FilenameDate(formatID: format.id, year: year, month: month, day: day, time: time, clock: format.clock)
+        return FilenameDate(formatID: format.id, year: year, month: month, day: day, time: time, clock: format.clock, spans: spans)
+    }
+
+    private static func part(for field: FilenameFormat.Field) -> DateSpan.Part? {
+        switch field {
+        case .year: .year
+        case .month: .month
+        case .day: .day
+        case .hour, .meridiem: .hour
+        case .minute: .minute
+        case .second: .second
+        case .millisecond: .fraction
+        case .epochSeconds, .epochMilliseconds: nil
+        }
     }
 
     /// 12 AM is midnight, 12 PM is noon. Out-of-range hours are left alone so the date reads as invalid.

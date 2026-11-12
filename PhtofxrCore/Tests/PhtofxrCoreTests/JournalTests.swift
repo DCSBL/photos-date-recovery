@@ -244,3 +244,78 @@ struct SkipOverlayTests {
         #expect(Classification.applying(skipped: [], to: classified) == classified)
     }
 }
+
+@Suite("Dates picked by the user")
+struct ManualDateTests {
+    func item(_ id: String, _ category: DateCategory, proposed: Date?) -> Classification {
+        Classification(
+            asset: snapshot("\(id).jpg", created: moment(2016, 10, 11, 14), added: moment(2016, 10, 11), id: id),
+            category: category,
+            filenameDate: nil,
+            proposedDate: proposed,
+            reasons: []
+        )
+    }
+
+    @Test("A picked date works for any photo and wins over the proposal")
+    func manual() {
+        let items = [
+            item("no-date", .noDateInName, proposed: nil),
+            item("proposal", .certain, proposed: moment(2013, 1, 1)),
+            item("changed", .changedByApp, proposed: nil),
+            item("not-kept", .noDateInName, proposed: nil),
+        ]
+        let picked = moment(2005, 6, 7, 8, 9, 10)
+        let changes = ChangePlanner.changes(
+            for: items,
+            keeping: ["no-date", "proposal", "changed"],
+            manualDates: ["no-date": picked, "proposal": moment(2014, 2, 2), "changed": picked, "not-kept": picked]
+        )
+        #expect(changes.map(\.assetID) == ["no-date", "proposal"])
+        #expect(changes.first?.to == picked)
+        #expect(changes.first?.formatID == PlannedChange.manualFormatID)
+        #expect(changes.last?.to == moment(2014, 2, 2))
+    }
+}
+
+@Suite("Date of the previous photo in an import")
+struct NeighborDateTests {
+    func item(_ id: String, _ category: DateCategory, added: Date, created: Date = moment(2016, 10, 11, 14), proposed: Date? = nil) -> Classification {
+        Classification(
+            asset: snapshot("\(id).jpg", created: created, added: added, id: id),
+            category: category,
+            filenameDate: nil,
+            proposedDate: proposed,
+            reasons: []
+        )
+    }
+
+    let items: [Classification] = [
+        // Out of order on purpose: the order that counts is the order of adding.
+        item("d-no-name", .noDateInName, added: moment(2016, 10, 11, 14, 0, 30)),
+        item("a-proposal", .certain, added: moment(2016, 10, 11, 14, 0, 0), proposed: moment(2013, 1, 1)),
+        item("c-suspicious", .suspicious, added: moment(2016, 10, 11, 14, 0, 20)),
+        item("b-skipped", .skipped, added: moment(2016, 10, 11, 14, 0, 10), proposed: moment(2013, 2, 2)),
+        item("e-other-day", .certain, added: moment(2016, 10, 12, 9), proposed: moment(2014, 1, 1)),
+        item("f-no-name-next-day", .noDateInName, added: moment(2016, 10, 12, 10)),
+        item("g-first", .noDateInName, added: moment(2016, 10, 13, 10)),
+    ]
+
+    @Test("Skips photos without a trusted date and stays within the import day")
+    func previous() {
+        let match = NeighborDate.previous(to: "d-no-name", in: items, timeZone: amsterdam)
+        #expect(match?.id == "a-proposal")
+        #expect(match?.date == moment(2013, 1, 1))
+        #expect(NeighborDate.previous(to: "f-no-name-next-day", in: items, timeZone: amsterdam)?.id == "e-other-day")
+        #expect(NeighborDate.previous(to: "g-first", in: items, timeZone: amsterdam) == nil)
+        #expect(NeighborDate.previous(to: "missing", in: items, timeZone: amsterdam) == nil)
+    }
+
+    @Test("A date the user picked counts, also for a photo without a date in its name")
+    func manual() {
+        let picked = moment(2012, 12, 24, 20)
+        let match = NeighborDate.previous(to: "d-no-name", in: items, manualDates: ["c-suspicious": picked], timeZone: amsterdam)
+        #expect(match?.id == "c-suspicious")
+        #expect(match?.date == picked)
+    }
+}

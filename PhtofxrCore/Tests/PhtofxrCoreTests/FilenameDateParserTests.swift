@@ -194,3 +194,86 @@ struct FilenameDateParserTests {
         }
     }
 }
+
+@Suite("Where the date sits in the filename")
+struct DateSpanTests {
+    func spans(_ name: String, formats: [FilenameFormat] = FilenameFormat.catalog) throws -> [String] {
+        let parsed = try #require(FilenameDateParser(formats: formats).parse(name))
+        let utf16 = Array(name.utf16)
+        return parsed.spans.map { span in
+            "\(span.part.rawValue)=" + String(decoding: utf16[span.utf16Range], as: UTF16.self)
+        }
+    }
+
+    @Test("Android camera name: every part in order")
+    func android() throws {
+        #expect(try spans("IMG_20170223_123456.jpg") == ["year=2017", "month=02", "day=23", "hour=12", "minute=34", "second=56"])
+    }
+
+    @Test("Milliseconds are their own part")
+    func milliseconds() throws {
+        #expect(try spans("PXL_20210101_123456789.jpg").last == "fraction=789")
+    }
+
+    @Test("Date-only names have no time parts")
+    func dateOnly() throws {
+        #expect(try spans("IMG-20220201-WA0001.jpg") == ["year=2022", "month=02", "day=01"])
+    }
+
+    @Test("Day-month-year names are still listed in filename order")
+    func europeanOrder() throws {
+        #expect(try spans("Photo 23-02-2017.jpg") == ["day=23", "month=02", "year=2017"])
+    }
+
+    @Test("Spans count UTF-16 like NSRange, also after non-ASCII text")
+    func utf16() throws {
+        #expect(try spans("Vakantie é 2017-02-23 12-34-56.jpg") == ["year=2017", "month=02", "day=23", "hour=12", "minute=34", "second=56"])
+    }
+
+    @Test("Epoch names have no spans")
+    func epoch() throws {
+        #expect(try spans("FB_IMG_1486000000000.jpg").isEmpty)
+    }
+
+    @Test("AM/PM counts as part of the hour")
+    func meridiem() throws {
+        #expect(try spans("Screen Shot 2017-02-23 at 1.34.56 PM.png").contains("hour=PM"))
+    }
+}
+
+@Suite("Cutting a filename into date parts")
+struct DateSegmentTests {
+    func cut(_ name: String) throws -> [String] {
+        let parsed = try #require(FilenameDateParser().parse(name))
+        return DateSpan.segments(of: name, spans: parsed.spans).map { segment in
+            segment.part.map { "[\($0.rawValue):\(segment.text)]" } ?? segment.text
+        }
+    }
+
+    @Test("Plain text and parts alternate and add up to the whole name")
+    func whole() throws {
+        let name = "IMG_20130109_101536.jpg"
+        let segments = try cut(name)
+        #expect(segments == ["IMG_", "[year:2013]", "[month:01]", "[day:09]", "_", "[hour:10]", "[minute:15]", "[second:36]", ".jpg"])
+        let parsed = try #require(FilenameDateParser().parse(name))
+        #expect(DateSpan.segments(of: name, spans: parsed.spans).map(\.text).joined() == name)
+    }
+
+    @Test("Non-ASCII text before the date stays intact")
+    func nonASCII() throws {
+        let name = "Café 🎉 2017-02-23 12-34-56.jpg"
+        let parsed = try #require(FilenameDateParser().parse(name))
+        let segments = DateSpan.segments(of: name, spans: parsed.spans)
+        #expect(segments.map(\.text).joined() == name)
+        #expect(segments.first?.text == "Café 🎉 ")
+        #expect(segments.first { $0.part == .year }?.text == "2017")
+    }
+
+    @Test("Without spans the name is one plain segment; broken spans are ignored")
+    func noSpans() {
+        #expect(DateSpan.segments(of: "IMG_1234.JPG", spans: []) == [DateSpan.Segment("IMG_1234.JPG")])
+        let broken = [DateSpan(part: .year, utf16Range: 2..<6), DateSpan(part: .month, utf16Range: 4..<8), DateSpan(part: .day, utf16Range: 10..<40)]
+        #expect(DateSpan.segments(of: "a_2013_x", spans: broken).map(\.text) == ["a_", "2013", "_x"])
+        #expect(DateSpan.segments(of: "", spans: []).isEmpty)
+    }
+}

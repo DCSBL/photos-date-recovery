@@ -10,6 +10,9 @@ public struct PlannedChange: Identifiable, Hashable, Sendable {
     public let addedDate: Date?
     public let formatID: String?
 
+    /// `formatID` of a date the user picked themselves.
+    public static let manualFormatID = "manual"
+
     public init(assetID: String, filename: String?, from: Date?, to: Date, addedDate: Date?, formatID: String?) {
         self.assetID = assetID
         self.filename = filename
@@ -45,17 +48,25 @@ public struct ImportSummary: Identifiable, Hashable, Sendable {
 }
 
 public enum ChangePlanner {
-    /// The changes for the proposals the user chose to keep. Only reviewable items with a proposed date qualify.
-    public static func changes(for items: [Classification], keeping keep: Set<String>) -> [PlannedChange] {
+    /// The changes for the photos the user chose to keep: a proposal (certain or uncertain), or any photo with a
+    /// date the user picked (`manualDates`), which wins over the proposal. Photos Phtofxr already changed are left
+    /// out; revert those first.
+    public static func changes(
+        for items: [Classification],
+        keeping keep: Set<String>,
+        manualDates: [String: Date] = [:]
+    ) -> [PlannedChange] {
         items.compactMap { item in
-            guard keep.contains(item.id), item.category.isReviewable, let to = item.proposedDate else { return nil }
+            guard keep.contains(item.id), item.category != .changedByApp else { return nil }
+            let manual = manualDates[item.id]
+            guard let to = manual ?? (item.category.isReviewable ? item.proposedDate : nil) else { return nil }
             return PlannedChange(
                 assetID: item.id,
                 filename: item.asset.filename,
                 from: item.asset.creationDate,
                 to: to,
                 addedDate: item.asset.addedDate,
-                formatID: item.filenameDate?.formatID
+                formatID: manual != nil ? PlannedChange.manualFormatID : item.filenameDate?.formatID
             )
         }
         .sorted { ($0.addedDate ?? .distantPast, $0.assetID) < ($1.addedDate ?? .distantPast, $1.assetID) }
