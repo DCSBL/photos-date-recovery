@@ -44,6 +44,7 @@ jobs:
           xcodebuild -version
           swift --version
 
+      # arm64 only: the simulators on these runners are Apple silicon, so an x86_64 slice doubles compile time for nothing.
       - name: xcodebuild build-for-testing
         shell: bash
         run: |
@@ -56,6 +57,7 @@ jobs:
             -derivedDataPath "$RUNNER_TEMP/DerivedData" \
             CODE_SIGNING_ALLOWED=NO \
             COMPILER_INDEX_STORE_ENABLE=NO \
+            ARCHS=arm64 \
             ONLY_ACTIVE_ARCH=YES \
             2>&1 | tee build.log
 
