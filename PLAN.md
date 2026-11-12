@@ -122,17 +122,20 @@ Randgevallen in de tests:
    - **Wat scannen**: foto's, video's en screenshots, elk aan/uit, plus "hele bibliotheek" of "gekozen albums". Albums kunnen alleen bij volledige toegang.
    - Knop "Scan bibliotheek", met voortgang.
 2. **Resultaat** (zijbalk, na de scan): Te beoordelen (zeker · onzeker) · Verdacht · Klopt al · Geen datum in naam · Overgeslagen · Door app aangepast, elk met het aantal foto's.
-3. **Lijst** (middenkolom): gegroepeerd per **Toegevoegd-dag** (importdag), grootste imports eerst. Bij Te beoordelen staan binnen elke import de groepen Zeker en Onzeker.
-   - Per rij: miniatuur, bestandsnaam, nu → voorstel.
-   - Bulk: alles in een groep selecteren, meervoudige selectie, en "Bewaar" / "Niet bewaren".
-4. **Detail**: grote foto met huidige datum, voorstel, toegevoegd-datum, herkend formaat en de reden(en).
-5. **Controleren en toepassen**:
+3. **Imports** (middenkolom): per **Toegevoegd-dag** (importdag), grootste imports eerst, met aantallen (zeker · onzeker · bewaard) en de jaren van de nieuwe datums. Veeg een import om alle zekere voorstellen te bewaren.
+4. **Foto's van één import** (lijst met info, geen raster): bij Te beoordelen de groepen Zeker en Onzeker.
+   - Per rij: miniatuur, bestandsnaam met gemarkeerde datumdelen, nu → nieuwe datum (zelfde markering), categorie en reden in een paar woorden.
+   - Markering per datumdeel: jaar blauw, maand groen, dag rood, uren paars, minuten blauwgroen, seconden amber; leesbaar op wit en zwart (contrast ≥ 4,5:1). Met "Onderscheid zonder kleur" krijgt elk deel een eigen onderstreping.
+   - Bulk: per groep "Bewaar alle" / "Niet bewaren"; per foto vegen.
+5. **Detail**: foto, gemarkeerde bestandsnaam met legenda, voorstel, huidige datum, verschil, toegevoegd-datum, herkend formaat, reden(en), en Bewaar / Niet bewaren / **Andere datum…**.
+6. **Andere datum…** (blad, voor elke foto behalve al aangepaste): snel kiezen "Uit de naam" of "Zoals de vorige foto" (de foto die in dezelfde import net ervoor is toegevoegd en een betrouwbare datum heeft), of een kalender met tijd. Een gekozen datum telt als bewaard, wint van het voorstel, wordt onthouden tot hij is toegepast en gaat mee naar Controleren.
+7. **Controleren en toepassen**:
    - Een apart scherm met het overzicht: aantal foto's, per import van → naar, en de keuze "Zet oorspronkelijke datum in bijschrift".
    - Daarna een expliciete bevestigingsknop, de systeemmelding van iOS, voortgang en een resultaat.
    - Er gebeurt niets zonder deze twee bevestigingen.
-6. **Geschiedenis**: batches met datum en aantal, met "Draai batch terug" of terugdraaien per foto.
-7. **Instellingen**: formaten aan/uit (met voorbeeld), drempels, minimumjaar, Diagnose.
-8. **Diagnose**:
+8. **Geschiedenis**: batches met datum en aantal, met "Draai batch terug" of terugdraaien per foto.
+9. **Instellingen**: formaten aan/uit (met voorbeeld), drempels, minimumjaar, Diagnose.
+10. **Diagnose**:
    - per foto alle naamvelden, de datums en de bijschriften
    - tellingen: hoe vaak een naam ontbreekt of verschilt
    - de duur van de scan
@@ -220,7 +223,7 @@ iPad krijgt pas een eigen job als iPad echt een doel wordt. CI draait op pull re
 ## 11. Fases (elke fase = één PR)
 
 1. **Skelet + Core + CI** (klaar, PR #1): project, formatencatalogus, parser, classificatie met tests, workflows. De app scant alleen-lezend en toont categorieën, lijst, detail en diagnose.
-2. **Beslissen + controleren + toepassen + terugdraaien**: bewaren en niet bewaren per foto (vegen, detail) en in bulk (per import, alle zekere), controlescherm, toepassen in blokken van 1000, logboek, bijschrift, geschiedenis met terugdraaien per batch.
+2. **Beslissen + controleren + toepassen + terugdraaien**: bewaren en niet bewaren per foto (vegen, detail) en in bulk (per import, alle zekere), controlescherm, toepassen in blokken van 1000, logboek, bijschrift, geschiedenis met terugdraaien per batch. Daarbij: imports → foto's als lijst met info, gemarkeerde datumdelen en "Andere datum…" per foto.
 3. **Instellingen afmaken** (drempels instelbaar) en kleine verbeteringen uit het testen.
 4. **Albums kiezen + beperkte toegang afmaken**.
 5. **Op je toestel**: diagnose A1–A6, bijsturen, daarna TestFlight via Xcode Cloud.

@@ -6,9 +6,22 @@ struct PhtofxrApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
                 .environment(model)
                 .tint(.orange)
         }
+    }
+}
+
+/// Passes the system's Differentiate Without Color on to the date marks; `-phtofxrWithoutColor` forces it for
+/// screenshots.
+private struct RootView: View {
+    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+
+    private static let forcesWithoutColor = ProcessInfo.processInfo.arguments.contains("-phtofxrWithoutColor")
+
+    var body: some View {
+        ContentView()
+            .environment(\.marksDatePartsWithoutColor, differentiateWithoutColor || Self.forcesWithoutColor)
     }
 }

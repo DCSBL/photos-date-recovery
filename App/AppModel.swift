@@ -29,6 +29,7 @@ final class AppModel {
     private let defaults: UserDefaults
     private let journal: JournalStore
     private let skippedStore: JSONFileStore<Set<String>>
+    private let manualStore: JSONFileStore<[String: Date]>
 
     var access: LibraryAccess
     private(set) var scanState: ScanState = .idle
@@ -47,8 +48,11 @@ final class AppModel {
     private var groupsBySection: [ResultSection: [ImportGroup]] = [:]
     private var rebuildGeneration = 0
 
-    /// Proposals marked "keep", waiting for the review screen. Not stored: nothing happens until applied.
+    /// Photos marked "keep", waiting for the review screen: proposals, and photos with a date the user picked.
+    /// Proposals are not stored (one tap brings them back); picked dates are, together with their keep mark.
     private(set) var kept: Set<String> = []
+    /// Dates the user picked for a photo ("Other date…"). They win over the proposal and count as kept.
+    private(set) var manualDates: [String: Date]
     /// Proposals marked "don't keep"; stored so a new scan does not offer them again.
     private(set) var skipped: Set<String>
     private(set) var journalState: JournalState
@@ -72,9 +76,12 @@ final class AppModel {
         self.timeZone = timeZone
         journal = JournalStore(url: storage.appendingPathComponent("journal.jsonl"))
         skippedStore = JSONFileStore(url: storage.appendingPathComponent("skipped.json"))
+        manualStore = JSONFileStore(url: storage.appendingPathComponent("manual-dates.json"))
         access = library.currentAccess()
         settings = Self.loadSettings(from: defaults)
         skipped = skippedStore.load() ?? []
+        manualDates = manualStore.load() ?? [:]
+        kept = Set(manualDates.keys)
         journalState = JournalState((try? journal.load()) ?? [])
         addsCaption = defaults.object(forKey: Self.captionKey) as? Bool ?? true
     }
@@ -158,6 +165,10 @@ final class AppModel {
         byID[id]
     }
 
+    func group(id: ImportGroup.ID, in section: ResultSection) -> ImportGroup? {
+        groupsBySection[section]?.first { $0.id == id }
+    }
+
     func setMediaKind(_ kind: MediaKind, included: Bool) {
         if included { settings.mediaKinds.insert(kind) } else { settings.mediaKinds.remove(kind) }
     }
@@ -170,13 +181,47 @@ final class AppModel {
 
     func isKept(_ id: String) -> Bool { kept.contains(id) }
 
-    /// Marks proposals to be applied. Only current proposals qualify.
+    /// Marks proposals to be applied. Only current proposals and photos with a picked date qualify.
     func keep<S: Sequence>(_ ids: S) where S.Element == String {
-        kept.formUnion(ids.filter { byID[$0]?.category.isReviewable == true })
+        kept.formUnion(ids.filter(isKeepable))
     }
 
+    /// Takes back the keep mark, and a picked date with it.
     func unkeep<S: Sequence>(_ ids: S) where S.Element == String {
+        let ids = Set(ids)
         kept.subtract(ids)
+        removeManualDates(ids)
+    }
+
+    /// The date a photo gets when it is applied: the picked date, else the proposal.
+    func targetDate(of item: Classification) -> Date? {
+        manualDates[item.id] ?? item.proposedDate
+    }
+
+    // MARK: - Picking a date
+
+    /// Whether the user can pick a date for this photo. Photos Phtofxr already changed are reverted first.
+    func canPickDate(for id: String) -> Bool {
+        guard let item = byID[id] else { return false }
+        return item.category != .changedByApp
+    }
+
+    /// Sets the date the user picked and marks the photo as kept. Nothing changes until the review is confirmed.
+    func setManualDate(_ date: Date, for id: String) {
+        guard canPickDate(for: id) else { return }
+        manualDates[id] = date
+        kept.insert(id)
+        saveManualDates()
+    }
+
+    /// The date of the photo added just before this one in the same import, for "Like the previous photo".
+    func previousPhotoDate(for id: String) -> NeighborDate.Match? {
+        NeighborDate.previous(to: id, in: current, manualDates: manualDates, timeZone: timeZone)
+    }
+
+    /// The date the filename describes, also when the scan did not propose it (suspicious, already correct).
+    func nameDate(of item: Classification) -> Date? {
+        item.proposedDate ?? item.filenameDate?.resolved(in: timeZone, keepingTimeOf: item.asset.creationDate)
     }
 
     /// Every certain proposal in the result, for the "keep all certain" action.
@@ -190,6 +235,7 @@ final class AppModel {
     func skip<S: Sequence>(_ ids: S) -> Task<Void, Never> where S.Element == String {
         let ids = Set(ids)
         kept.subtract(ids)
+        removeManualDates(ids)
         skipped.formUnion(ids)
         saveSkipped()
         return Task { await rebuild() }
@@ -206,7 +252,7 @@ final class AppModel {
 
     /// The changes the review screen shows and `applyKept` makes.
     var plannedChanges: [PlannedChange] {
-        ChangePlanner.changes(for: current, keeping: kept)
+        ChangePlanner.changes(for: current, keeping: kept, manualDates: manualDates)
     }
 
     /// The caption line for a change, in the app's language; the journal keeps the exact text for undo.
@@ -261,6 +307,8 @@ final class AppModel {
         }
 
         kept.removeAll()
+        manualDates.removeAll()
+        saveManualDates()
         reloadJournal()
         if let failure, changedCount == 0 {
             workState = .failed(failure)
@@ -327,7 +375,21 @@ final class AppModel {
         byID = Dictionary(items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         counts = CategoryCounts(items)
         groupsBySection = groups
-        kept = kept.filter { byID[$0]?.category.isReviewable == true }
+        // Photos that left the scan (deleted, or another media kind) or were changed meanwhile lose their choice.
+        let stalePicks = Set(manualDates.keys.filter { byID[$0] == nil || byID[$0]?.category == .changedByApp })
+        removeManualDates(stalePicks)
+        kept = kept.filter(isKeepable)
+    }
+
+    private func isKeepable(_ id: String) -> Bool {
+        guard let item = byID[id] else { return false }
+        return item.category.isReviewable || (manualDates[id] != nil && item.category != .changedByApp)
+    }
+
+    private func removeManualDates(_ ids: Set<String>) {
+        guard ids.contains(where: { manualDates[$0] != nil }) else { return }
+        for id in ids { manualDates[id] = nil }
+        saveManualDates()
     }
 
     private func rescanAfterWork() async {
@@ -354,6 +416,10 @@ final class AppModel {
 
     private func saveSkipped() {
         try? skippedStore.save(skipped)
+    }
+
+    private func saveManualDates() {
+        try? manualStore.save(manualDates)
     }
 
     private func updateProgress(_ fraction: Double) {

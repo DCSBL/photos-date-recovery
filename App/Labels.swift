@@ -62,6 +62,28 @@ extension Reason {
     }
 }
 
+extension Reason {
+    /// A few words for the photo list; the detail screen gives the full explanation.
+    var shortLabel: String {
+        switch self {
+        case .noDateInName: String(localized: "no date in name")
+        case .invalidDateInName: String(localized: "date does not exist")
+        case .nameBeforeMinimumYear: String(localized: "before minimum year")
+        case .nameInFuture: String(localized: "in the future")
+        case .missingCreationDate: String(localized: "no date in Photos")
+        case .matchesName: String(localized: "matches the name")
+        case .smallDifference: String(localized: "days apart")
+        case .unreliableFormat: String(localized: "format not always reliable")
+        case .nearAddedDate: String(localized: "date is the import moment")
+        case .pileDay(let count): String(localized: "pile day of \(count) photos")
+        case .cameraResetDate: String(localized: "camera clock reset")
+        case .conflictsWithOwnDate: String(localized: "own date differs")
+        case .skippedByUser: String(localized: "not kept")
+        case .changedByApp: String(localized: "changed by Phtofxr")
+        }
+    }
+}
+
 extension FilenameFormat {
     /// Brand names stay as they are; the generic formats get a translated name.
     var displayName: String {

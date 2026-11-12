@@ -1,66 +1,38 @@
 import PhtofxrCore
 import SwiftUI
 
-/// One photo: what Photos says now, what the filename says, and why the scan put it where it is.
+/// One photo: the filename with its date parts marked, what Photos says now, what it would become and why, and
+/// the choice: keep, don't keep, or pick another date.
 struct AssetDetailView: View {
     @Environment(AppModel.self) private var model
-    let item: Classification
+    let id: Classification.ID
+    @State private var picksDate = false
 
     var body: some View {
-        Form {
+        if let item = model.item(id: id) {
+            content(item)
+        } else {
+            ContentUnavailableView("Photo not found", systemImage: "photo")
+        }
+    }
+
+    private func content(_ item: Classification) -> some View {
+        let manual = model.manualDates[item.id]
+        return Form {
             Section {
                 HStack {
                     Spacer()
-                    Thumbnail(id: item.id, side: 240)
+                    Thumbnail(id: item.id, side: 200)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
             }
 
-            if item.category.isReviewable || item.category == .skipped {
-                Section("Your choice") {
-                    if item.category == .skipped {
-                        Button("Propose again", systemImage: "arrow.uturn.backward") {
-                            model.unskip([item.id])
-                        }
-                    } else if model.isKept(item.id) {
-                        Label("Kept: applied after you review and confirm", systemImage: "checkmark.circle.fill")
-                        Button("Undo keep", systemImage: "arrow.uturn.backward") {
-                            model.unkeep([item.id])
-                        }
-                    } else {
-                        Button("Keep this proposal", systemImage: "checkmark.circle") {
-                            model.keep([item.id])
-                        }
-                        .accessibilityIdentifier("keepItem")
-                        Button("Don't keep", systemImage: "xmark.circle") {
-                            model.skip([item.id])
-                        }
-                        .accessibilityIdentifier("skipItem")
-                    }
-                }
-            }
-
-            Section("Dates") {
-                LabeledContent("In Photos now") {
-                    dateText(item.asset.creationDate)
-                }
-                if let proposed = item.proposedDate {
-                    LabeledContent("Proposed") {
-                        dateText(proposed)
-                    }
-                    .accessibilityIdentifier("proposedDate")
-                }
-                if let difference = item.difference {
-                    LabeledContent("Difference", value: differenceText(difference))
-                }
-                LabeledContent("Added to the library") {
-                    dateText(item.asset.addedDate)
-                }
-            }
-
-            Section("Filename") {
-                LabeledContent("Name", value: item.asset.filename ?? String(localized: "No filename"))
+            Section {
+                FilenameText(item: item)
+                    .font(.title3)
+                    .textSelection(.enabled)
+                    .accessibilityIdentifier("filename")
                 if let name = item.filenameDate,
                    let format = FilenameFormat.catalog.first(where: { $0.id == name.formatID }) {
                     LabeledContent("Recognized as", value: format.displayName)
@@ -70,7 +42,39 @@ struct AssetDetailView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+            } header: {
+                Text("Filename")
+            } footer: {
+                if item.filenameDate?.spans.isEmpty == false {
+                    DatePartLegend()
+                }
             }
+
+            Section("Dates") {
+                if let manual {
+                    LabeledContent("Picked by you") {
+                        MarkedDateText(date: manual, style: Self.longStyle)
+                    }
+                    .accessibilityIdentifier("manualDate")
+                }
+                if let proposed = item.proposedDate {
+                    LabeledContent("Proposed") {
+                        MarkedDateText(date: proposed, style: Self.longStyle)
+                    }
+                    .accessibilityIdentifier("proposedDate")
+                }
+                LabeledContent("In Photos now") {
+                    dateText(item.asset.creationDate)
+                }
+                if let target = manual ?? item.proposedDate, let current = item.asset.creationDate {
+                    LabeledContent("Difference", value: differenceText(target.timeIntervalSince(current)))
+                }
+                LabeledContent("Added to the library") {
+                    dateText(item.asset.addedDate)
+                }
+            }
+
+            choiceSection(item, manual: manual)
 
             Section("Why") {
                 LabeledContent("Category", value: item.category.title)
@@ -81,10 +85,71 @@ struct AssetDetailView: View {
         }
         .navigationTitle(item.asset.filename ?? String(localized: "Photo"))
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $picksDate) {
+            ManualDateSheet(item: item, initial: model.manualDates[item.id])
+        }
+    }
+
+    @ViewBuilder
+    private func choiceSection(_ item: Classification, manual: Date?) -> some View {
+        Section {
+            if item.category == .changedByApp {
+                Text("Phtofxr already changed this date. Revert it under History to change it again.")
+                    .foregroundStyle(.secondary)
+            } else if item.category == .skipped {
+                Button("Propose again", systemImage: "arrow.uturn.backward") {
+                    model.unskip([item.id])
+                }
+            } else if model.isKept(item.id) {
+                Group {
+                    if manual == nil {
+                        Label("Kept: applied after you review and confirm", systemImage: "checkmark.circle.fill")
+                    } else {
+                        Label("Date picked: applied after you review and confirm", systemImage: "calendar.circle.fill")
+                    }
+                }
+                .accessibilityIdentifier("keptLabel")
+                Button {
+                    model.unkeep([item.id])
+                } label: {
+                    if manual == nil {
+                        Label("Undo keep", systemImage: "arrow.uturn.backward")
+                    } else {
+                        Label("Remove picked date", systemImage: "arrow.uturn.backward")
+                    }
+                }
+                .accessibilityIdentifier("undoKeep")
+            } else if item.category.isReviewable {
+                Button("Keep this proposal", systemImage: "checkmark.circle") {
+                    model.keep([item.id])
+                }
+                .accessibilityIdentifier("keepItem")
+                Button("Don't keep", systemImage: "xmark.circle") {
+                    model.skip([item.id])
+                }
+                .accessibilityIdentifier("skipItem")
+            }
+            if model.canPickDate(for: item.id) {
+                Button {
+                    picksDate = true
+                } label: {
+                    if manual == nil {
+                        Label("Other date…", systemImage: "calendar")
+                    } else {
+                        Label("Change picked date…", systemImage: "calendar")
+                    }
+                }
+                .accessibilityIdentifier("otherDate")
+            }
+        } header: {
+            Text("Your choice")
+        }
     }
 
     private func dateText(_ date: Date?) -> Text {
         guard let date else { return Text("Unknown") }
-        return Text(date.formatted(date: .long, time: .standard))
+        return Text(date.formatted(Self.longStyle))
     }
+
+    static let longStyle = Date.FormatStyle(date: .long, time: .standard)
 }

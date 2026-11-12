@@ -69,6 +69,11 @@ struct ApplyReviewView: View {
         Section {
             Text("\(changes.count) photos get a new date.")
                 .font(.headline)
+            let picked = changes.filter { $0.formatID == PlannedChange.manualFormatID }.count
+            if picked > 0 {
+                Text("\(picked) of them with a date you picked.")
+                    .accessibilityIdentifier("pickedCount")
+            }
             Text("Only the date taken changes. The date added stays as it is, so the original import date is never lost.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)

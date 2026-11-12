@@ -1,14 +1,15 @@
 import PhtofxrCore
 import SwiftUI
 
-/// Sidebar (scan and results), list (photos per import) and detail. Collapses into one stack on a narrow
-/// window (iPhone, folded iPhone Duo) and shows columns side by side when there is room: the layout follows
-/// the window, not the device.
+/// Sidebar (scan and results), imports of a section, and the photos of an import with each photo pushed on
+/// top. Collapses into one stack on a narrow window (iPhone, folded iPhone Duo) and shows columns side by side
+/// when there is room: the layout follows the window, not the device.
 struct ContentView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
     @State private var section: ResultSection?
-    @State private var selectedItem: Classification.ID?
+    @State private var selectedImport: ImportGroup.ID?
+    @State private var photoPath: [PhotoRoute] = []
     @State private var showsSettings = false
     @State private var columns: NavigationSplitViewVisibility = .all
 
@@ -28,7 +29,7 @@ struct ContentView: View {
                 }
         } content: {
             if let section {
-                ResultListView(section: section, selection: $selectedItem)
+                ImportListView(section: section, selection: $selectedImport)
             } else {
                 ContentUnavailableView(
                     "Scan your library",
@@ -37,10 +38,17 @@ struct ContentView: View {
                 )
             }
         } detail: {
-            if let selectedItem, let item = model.item(id: selectedItem) {
-                AssetDetailView(item: item)
-            } else {
-                ContentUnavailableView("No photo selected", systemImage: "photo")
+            NavigationStack(path: $photoPath) {
+                Group {
+                    if let section, let selectedImport {
+                        PhotoListView(section: section, importID: selectedImport)
+                    } else {
+                        ContentUnavailableView("No import selected", systemImage: "square.stack")
+                    }
+                }
+                .navigationDestination(for: PhotoRoute.self) { route in
+                    AssetDetailView(id: route.id)
+                }
             }
         }
         // Where the window is wide enough (unfolded iPhone Duo, iPad) the scan controls stay visible next to the list.
@@ -55,7 +63,11 @@ struct ContentView: View {
             HistoryView()
         }
         .onChange(of: section) {
-            selectedItem = nil
+            selectedImport = nil
+            photoPath = []
+        }
+        .onChange(of: selectedImport) {
+            photoPath = []
         }
         .onChange(of: scenePhase) {
             // Permission can change in Settings while the app is in the background.
